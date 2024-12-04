@@ -1,10 +1,56 @@
-FROM osrf/ros:foxy-desktop
+FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV ROS1_DISTRO=noetic
 ENV ROS2_DISTRO=foxy
+
+###################################### user #####################################
+
+ENV SHELL=/bin/bash \
+    USER=arg \
+    UID=1000 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8
+
+ENV HOME=/home/${USER}
+
+RUN adduser --disabled-password \
+    --gecos "Default user" \
+    --uid ${UID} \
+    ${USER} 
+
+RUN echo "root:root" | chpasswd
+RUN echo "${USER}:111111" | chpasswd
+
+
+###################################### basic tools #####################################
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    gnupg2 \
+    lsb-release \
+    build-essential \
+    python3-pip \
+    git \
+    wget \
+    vim \
+    wget \
+    cmake \
+    git \
+    libbullet-dev \
+    libpython3-dev \
+    python3-empy \
+    python3-numpy \
+    python3-pytest \
+    python3-yaml \
+    libasio-dev \
+    libtinyxml2-dev \
+    libcunit1-dev \
+    apt-utils \
+    && apt-get update && apt-get install -y git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ###################################### ROS1 ######################################
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
@@ -14,18 +60,40 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
     python3-rosdep \
     python3-rosinstall \
     python3-rosinstall-generator \
-    python3-catkin-tools && \
-    if [ -e /etc/ros/rosdep/sources.list.d/20-default.list ]; then \
-        rm /etc/ros/rosdep/sources.list.d/20-default.list; \
-    fi && \
-    rosdep init && rosdep update && \
+    python3-vcstool \
+    python3-catkin-tools \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+###################################### ROS1-ROS2-Bridge ################################
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-${ROS1_DISTRO}-catkin \
+    ros-${ROS1_DISTRO}-roscpp \
+    ros-${ROS1_DISTRO}-roslaunch \
+    ros-${ROS1_DISTRO}-rosmsg \
+    ros-${ROS1_DISTRO}-std-msgs \
+    python3-rospkg \
+    ros-${ROS1_DISTRO}-rosbash \
+    ros-${ROS1_DISTRO}-roscpp-tutorials \
+    ros-${ROS1_DISTRO}-rospy-tutorials \
+    ros-${ROS1_DISTRO}-rostopic \
+    ros-${ROS1_DISTRO}-rqt-image-view \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+###################################### ROS2 ####################################
+
+RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu focal main" > /etc/apt/sources.list.d/ros2-latest.list' && \
+    curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    ros-${ROS2_DISTRO}-desktop \
+    python3-argcomplete \
+    python3-colcon-common-extensions \
+    python3-rosdep \
+    python3-rosinstall \
+    python3-rosinstall-generator \
+    python3-vcstool \
+    && rosdep init && rosdep update && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-###################################### ROS1-ROS2-Bridge ####################################
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ros-${ROS2_DISTRO}-ros1-bridge && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-    
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
