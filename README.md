@@ -3,7 +3,7 @@
 ## Clone repo 
 
 ```
-git clone --recursive git@github.com:ARG-NCTU/moos-dawg-2024.git
+git clone --recursive git@github.com:ARG-NCTU/perception-fusion.git
 ``` 
 
 ## Update repo and submodules
