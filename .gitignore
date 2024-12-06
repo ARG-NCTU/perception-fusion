@@ -6,3 +6,5 @@ ros1_ws/build
 ros1_ws/devel
 ros1_ws/install
 ros1_ws/log
+
+bags/

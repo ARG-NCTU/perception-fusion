@@ -38,11 +38,9 @@ source Docker/ros1-ros2/run.sh
 source build_ros1_bridge.sh
 ```
 
-## Example 1: run the bridge and the example talker and listener
+## Usage
 
-### Example 1a: ROS 1 talker and ROS 2 listener
-
-#### Terminal 1
+### Terminal 1
 
 1. Docker Run
 
@@ -52,7 +50,7 @@ Run this script to pull docker image to your workstation.
 source Docker/ros1-ros2/run.sh
 ```
 
-2. Source ROS 1 Environment
+2. Source ROS1 Environment
 
 ```bash
 source environment_ros1.sh
@@ -63,7 +61,7 @@ source environment_ros1.sh
 ```bash
 roscore
 ```
-#### Terminal 2
+### Terminal 2
 
 1. Docker Run
 
@@ -71,19 +69,20 @@ roscore
 source Docker/ros1-ros2/run.sh
 ```
 
-2. Source ROS 2 Environment
+2. Source ROS1 & ROS2 Environment
 
 ```bash
+source environment_ros1.sh
 source environment_ros2.sh
 ```
 
 3. Run Ros1_bridge
 
 ```bash
-ros2 run ros1_bridge dynamic_bridge
+ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
 ```
 
-#### Terminal 3
+### Terminal 3
 
 1. Docker Run
 
@@ -91,19 +90,27 @@ ros2 run ros1_bridge dynamic_bridge
 source Docker/ros1-ros2/run.sh
 ```
 
-2. Source ROS 1 Environment
+2. Source ROS1 Environment
 
 ```bash
 source environment_ros1.sh
 ```
 
-3. Run ROS1 Talker
+3. Run ROS1 Bag Example
 
+Image Bag
 ```bash
-rosrun rospy_tutorials talker
+cd bags/images-2024-11-23-15-28-41/
+rosbag play 2024-11-23-15-28-41.bag 
 ```
 
-#### Terminal 4
+Pose & Layser Bag
+```bash
+cd bags/1123_1528/
+rosbag play 2024-11-23-15-28-44_0.bag 
+```
+
+### Terminal 4
 
 1. Docker Run
 
@@ -111,40 +118,55 @@ rosrun rospy_tutorials talker
 source Docker/ros1-ros2/run.sh
 ```
 
-2. Run ROS2 Listener
+2. Source ROS2 Environment
 
 ```bash
-ros2 run demo_nodes_cpp listener
+source environment_ros2.sh
 ```
 
-### Example 1b: ROS 2 talker and ROS 1 listener
+3. Run ROS2 Bag Example
 
-Terminal 1 & 2 are same with Example 1a.
+Radar Bag
+```bash
+cd bags/recorded_rosbag_halo_20241123-141728/
+ros2 bag play recorded_rosbag_halo_20241123-141728_0.db3
+```
 
-#### Terminal 3
-
+### Terminal 5
 1. Docker Run
 
 ```bash
 source Docker/ros1-ros2/run.sh
 ```
 
-2. Run ROS2 Talker
+2. Source ROS1 Environment
 
 ```bash
-ros2 run demo_nodes_py talker
+source environment_ros1.sh
 ```
 
-#### Terminal 4
+3. Rviz
 
+```bash
+rviz
+```
+
+### Terminal 6
 1. Docker Run
 
 ```bash
 source Docker/ros1-ros2/run.sh
 ```
 
-2. Run ROS1 Listener
+2. Source ROS2 Environment
 
 ```bash
-rosrun roscpp_tutorials listener
+source environment_ros2.sh
 ```
+
+3. Rviz2
+
+```bash
+rviz2
+```
+
