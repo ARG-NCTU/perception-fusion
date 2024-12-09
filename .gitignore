@@ -9,3 +9,4 @@ ros1_ws/install
 ros1_ws/logs
 
 bags/
+datasets/

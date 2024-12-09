@@ -5,3 +5,6 @@
 	path = ros1_ws/src/realsense-ros
 	url = git@github.com:ARG-NCTU/realsense-ros.git
 	branch = ros1-legacy
+[submodule "ros1_ws/src/librealsense"]
+	path = ros1_ws/src/librealsense
+	url = git@github.com:ARG-NCTU/librealsense.git
