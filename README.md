@@ -16,7 +16,9 @@ git submodule update --init --recursive
 
 ## Set up Environment
 
-1. Docker Run
+1. Enter Docker Enviroment
+
+1.1. Docker Run
 
 Run this script to pull docker image to your workstation.
 
@@ -24,7 +26,7 @@ Run this script to pull docker image to your workstation.
 source Docker/ros1-ros2/run.sh
 ```
 
-2. Docker Join
+1.2. Docker Join
 
 If want to enter same docker image, type below command.
 
@@ -32,10 +34,16 @@ If want to enter same docker image, type below command.
 source Docker/ros1-ros2/run.sh
 ```
 
-3. Building ROS1 bridge
+2. Building ROS2 ROS1 bridge
 
 ```bash
-source build_ros1_bridge.sh
+source build_ros2_ros1_bridge.sh
+```
+
+3. Building All ROS1 package
+
+```bash
+source build_ros1_all.sh
 ```
 
 ## Usage
@@ -121,7 +129,7 @@ Launch 1 camera
 roslaunch realsense2_camera side_camera_1.launch
 ```
 
-3.1.2. Run 2 camera
+3.1.2. Run 3 camera
 
 Modify Serial number in 3 camera Launch File
 ```bash
