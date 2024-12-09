@@ -1,0 +1,11 @@
+<launch>
+    <!-- Parameters for the bag_to_gpx script -->
+    <arg name="bag_file" default="bags/lidarX180images-2024_1206_1408/2024-12-06-14-08-59.bag"/>
+    <arg name="gpx_file" default="data/gpx/2024-12-06-14-08-59.gpx"/>
+
+    <!-- Launch the bag_to_gpx node -->
+    <node pkg="bag_to_tools" type="bag_to_gpx.py" name="bag_to_gpx_node" output="screen">
+        <param name="bag_file" value="$(arg bag_file)"/>
+        <param name="gpx_file" value="$(arg gpx_file)"/>
+    </node>
+</launch>

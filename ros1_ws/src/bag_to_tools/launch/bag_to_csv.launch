@@ -1,0 +1,11 @@
+<launch>
+    <!-- Parameters for the bag_to_csv script -->
+    <arg name="bag_file" default="bags/lidarX180images-2024_1206_1408/2024-12-06-14-08-59.bag"/>
+    <arg name="csv_file" default="data/csv/2024-12-06-14-08-59.csv"/>
+
+    <!-- Launch the bag_to_csv node -->
+    <node pkg="bag_to_tools" type="bag_to_csv.py" name="bag_to_csv_node" output="screen">
+        <param name="bag_file" value="$(arg bag_file)"/>
+        <param name="csv_file" value="$(arg csv_file)"/>
+    </node>
+</launch>
