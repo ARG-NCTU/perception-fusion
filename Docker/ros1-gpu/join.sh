@@ -2,7 +2,7 @@
 
 BASH_OPTION=bash
 
-IMG=argnctu/crf-net:gpu
+IMG=argnctu/perception-fusion:ros1-gpu
 
 xhost +
 containerid=$(docker ps -aqf "ancestor=${IMG}") && echo $containerid

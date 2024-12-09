@@ -75,6 +75,8 @@ RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=t
     ros-$ROS_DISTRO-cv-bridge \
     ros-$ROS_DISTRO-rosbag \
     ros-$ROS_DISTRO-rviz-imu-plugin \
+    ros-$ROS_DISTRO-realsense2-camera \
+    ros-$ROS_DISTRO-rgbd-launch \
     python3-catkin-tools \
     python3-rosdep \
     python3-rosinstall \
@@ -136,6 +138,24 @@ ENV NVIDIA_DRIVER_CAPABILITIES=all
 
 USER ${USER}
 WORKDIR ${HOME}
-CMD ["/bin/bash"]
 
-# python3 setup.py build_ext --inplace
+######################################## realsense ########################################
+
+USER root
+RUN apt-get update && apt-get install -y \
+    libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
+    libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
+    && rm -rf /var/lib/apt/lists/*
+
+# set the version of the realsense library
+ENV LIBREALSENSE_VERSION 2.50.0
+RUN cd ${HOME} && git clone https://github.com/IntelRealSense/librealsense.git \
+    && cd librealsense \
+    && git checkout v${LIBREALSENSE_VERSION} \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make install
+
+USER ${USER}
+    
