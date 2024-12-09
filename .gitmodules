@@ -8,3 +8,6 @@
 [submodule "ros1_ws/src/librealsense"]
 	path = ros1_ws/src/librealsense
 	url = git@github.com:ARG-NCTU/librealsense.git
+[submodule "ros1_ws/src/nuscenes_visualize"]
+	path = ros1_ws/src/nuscenes_visualize
+	url = git@github.com:ARG-NCTU/nuscenes_visualize.git
