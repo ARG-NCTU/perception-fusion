@@ -103,4 +103,23 @@ RUN echo "source /opt/ros/${ROS2_DISTRO}/setup.bash" >> /etc/bash.bashrc
 
 USER ${USER}
 WORKDIR ${HOME}
-CMD ["/bin/bash"]
+
+######################################## realsense ########################################
+
+USER root
+RUN apt-get update && apt-get install -y \
+    libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
+    libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
+    && rm -rf /var/lib/apt/lists/*
+
+# set the version of the realsense library
+ENV LIBREALSENSE_VERSION 2.50.0
+RUN cd ${HOME} && git clone https://github.com/IntelRealSense/librealsense.git \
+    && cd librealsense \
+    && git checkout v${LIBREALSENSE_VERSION} \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make install
+
+USER ${USER}
