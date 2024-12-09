@@ -186,7 +186,7 @@ source environment_ros1.sh
 3. Rviz
 
 ```bash
-rviz
+rviz -d rviz/radar-example.rviz
 ```
 
 ### Terminal 6
@@ -205,6 +205,6 @@ source environment_ros2.sh
 3. Rviz2
 
 ```bash
-rviz2
+rviz2 -d rviz2/lidar-camera-example.rviz
 ```
 
