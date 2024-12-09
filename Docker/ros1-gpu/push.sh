@@ -1,2 +1,2 @@
 docker login
-docker argnctu/perception-fusion:ros1-gpu
+docker push argnctu/perception-fusion:ros1-gpu
