@@ -95,10 +95,20 @@ RUN sudo -H pip install --upgrade twisted \
     cryptography \
     pyOpenSSL
 
+
+######################################## realsense ########################################
+
+RUN apt-get update && apt-get install -y \
+    libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
+    libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
+    && rm -rf /var/lib/apt/lists/*
+
 ##################################### PIP ######################################
 
 RUN mkdir -p /home/${USER}/.cache/pip && chown -R ${USER}:${USER} /home/${USER}/.cache/pip
 # RUN pip3 install --upgrade pip setuptools
+
+##################################### CRF-NET ######################################
 
 RUN pip3 install --upgrade setuptools==65.5.1 importlib-metadata==4.13.0
 RUN pip3 install --progress-bar=on --verbose \
@@ -127,6 +137,12 @@ RUN pip3 install --progress-bar=on --verbose \
 RUN pip3 install --progress-bar=on --verbose \
     WaterScenes==1.0.8
 
+##################################### Bag Tools ######################################
+
+RUN python3 -m pip install --upgrade \
+    gpxpy \
+    tqdm 
+
 ##################################### setting ###################################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
@@ -138,24 +154,5 @@ ENV NVIDIA_DRIVER_CAPABILITIES=all
 
 USER ${USER}
 WORKDIR ${HOME}
-
-######################################## realsense ########################################
-
-USER root
-RUN apt-get update && apt-get install -y \
-    libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
-    libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
-    && rm -rf /var/lib/apt/lists/*
-
-# set the version of the realsense library
-ENV LIBREALSENSE_VERSION 2.50.0
-RUN cd ${HOME} && git clone https://github.com/IntelRealSense/librealsense.git \
-    && cd librealsense \
-    && git checkout v${LIBREALSENSE_VERSION} \
-    && mkdir build \
-    && cd build \
-    && cmake .. \
-    && make install
-
-USER ${USER}
+CMD ["/bin/bash"]
     

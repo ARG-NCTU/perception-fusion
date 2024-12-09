@@ -57,12 +57,30 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
     echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros1-latest.list && \
     apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS1_DISTRO}-desktop-full \
+    ros-${ROS1_DISTRO}-rosbridge-suite \
+    ros-${ROS1_DISTRO}-cv-bridge \
+    ros-${ROS1_DISTRO}-rosbag \
+    ros-${ROS1_DISTRO}-rviz-imu-plugin \
+    ros-${ROS1_DISTRO}-realsense2-camera \
+    ros-${ROS1_DISTRO}-rgbd-launch \
+    ros-${ROS1_DISTRO}-mavros \
+    ros-${ROS1_DISTRO}-mavros-msgs \
+    python3-catkin-tools \
     python3-rosdep \
     python3-rosinstall \
     python3-rosinstall-generator \
+    python3-wstool \
     python3-vcstool \
-    python3-catkin-tools \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+###################################### ROSBRIDGE #####################################
+RUN python3 -m pip install --upgrade pip \
+    roslibpy \
+    pymavlink
+
+RUN sudo -H pip install --upgrade twisted \
+    cryptography \
+    pyOpenSSL
 
 ###################################### ROS1-ROS2-Bridge ################################
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -94,6 +112,22 @@ RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu foca
     && rosdep init && rosdep update && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+######################################## realsense ########################################
+
+RUN apt-get update && apt-get install -y \
+    libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
+    libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
+    && rm -rf /var/lib/apt/lists/*
+
+##################################### PIP ######################################
+
+RUN mkdir -p /home/${USER}/.cache/pip && chown -R ${USER}:${USER} /home/${USER}/.cache/pip
+RUN pip3 install --upgrade pip setuptools
+
+RUN python3 -m pip install --upgrade \
+    gpxpy \
+    tqdm 
+
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
@@ -103,23 +137,4 @@ RUN echo "source /opt/ros/${ROS2_DISTRO}/setup.bash" >> /etc/bash.bashrc
 
 USER ${USER}
 WORKDIR ${HOME}
-
-######################################## realsense ########################################
-
-USER root
-RUN apt-get update && apt-get install -y \
-    libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
-    libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
-    && rm -rf /var/lib/apt/lists/*
-
-# set the version of the realsense library
-ENV LIBREALSENSE_VERSION 2.50.0
-RUN cd ${HOME} && git clone https://github.com/IntelRealSense/librealsense.git \
-    && cd librealsense \
-    && git checkout v${LIBREALSENSE_VERSION} \
-    && mkdir build \
-    && cd build \
-    && cmake .. \
-    && make install
-
-USER ${USER}
+CMD ["/bin/bash"]
