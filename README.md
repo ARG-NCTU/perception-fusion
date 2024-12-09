@@ -40,7 +40,7 @@ source build_ros1_bridge.sh
 
 ## Usage
 
-### Terminal 1
+### Terminal 1: ROSCORE
 
 1. Docker Run
 
@@ -61,7 +61,7 @@ source environment_ros1.sh
 ```bash
 roscore
 ```
-### Terminal 2
+### Terminal 2: ROS1 & ROS2 BRIDGE
 
 1. Docker Run
 
@@ -82,7 +82,11 @@ source environment_ros2.sh
 ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
 ```
 
-### Terminal 3
+### Download bags
+
+Please download bags folder and put in the root path of the repo: [Link](http://gofile.me/773h8/WtbSM5xSh) 
+
+### Terminal 3: ROS1
 
 1. Docker Run
 
@@ -96,7 +100,41 @@ source Docker/ros1-ros2/run.sh
 source environment_ros1.sh
 ```
 
-3. Run ROS1 Bag Example
+3. Run ROS1 package
+
+3.1. Run Realsense Camera Example
+
+Search D435 camera Serial number
+```bash
+rs-enumerate-devices -s
+```
+
+3.1.1. Run 1 camera
+
+Modify Serial number in 1 camera Launch File
+```bash
+rosed realsense2_camera side_camera_1.launch
+```
+
+Launch 1 camera
+```bash
+roslaunch realsense2_camera side_camera_1.launch
+```
+
+3.1.2. Run 2 camera
+
+Modify Serial number in 3 camera Launch File
+```bash
+rosed realsense2_camera side_camera_3.launch
+```
+
+Launch 3 camera
+```bash
+roslaunch realsense2_camera side_camera_3.launch
+```
+
+
+3.2. Run ROS1 Bag Example
 
 Image Bag
 ```bash
@@ -110,7 +148,7 @@ cd bags/1123_1528/
 rosbag play 2024-11-23-15-28-44_0.bag 
 ```
 
-### Terminal 4
+### Terminal 4: ROS2
 
 1. Docker Run
 
