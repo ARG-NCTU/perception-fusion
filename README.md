@@ -91,7 +91,7 @@ Please download bags folder and put in the root path of the repo: [Link](http://
 1. Docker Run
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros1-gpu/run.sh
 ```
 
 2. Source ROS1 Environment
