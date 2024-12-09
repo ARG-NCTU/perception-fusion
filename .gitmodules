@@ -1,3 +1,7 @@
 [submodule "ros2_ws/src/ros1_bridge"]
 	path = ros2_ws/src/ros1_bridge
 	url = git@github.com:ARG-NCTU/ros1_bridge.git
+[submodule "ros1_ws/src/realsense-ros"]
+	path = ros1_ws/src/realsense-ros
+	url = git@github.com:ARG-NCTU/realsense-ros.git
+	branch = ros1-legacy
