@@ -90,7 +90,7 @@ class ROSImageStitcher:
         right_image = self.bridge.compressed_imgmsg_to_cv2(right_msg, desired_encoding='bgr8')
 
         # Save the images for debugging
-        # images_dir = os.path.join(rospack.get_path('object_detection'), self.output_dir, 'input_images')
+        # images_dir = os.path.join(rospack.get_path('image_processing'), self.output_dir, 'input_images')
         # os.makedirs(images_dir, exist_ok=True)
         # left_dir = os.path.join(images_dir, 'left')
         # mid_dir = os.path.join(images_dir, 'mid')
@@ -103,7 +103,7 @@ class ROSImageStitcher:
         # cv2.imwrite(os.path.join(right_dir, f"{self.image_index}.png"), right_image)
 
         # Proceed with stitching logic
-        output_dir = os.path.join(rospack.get_path('object_detection'), self.output_dir)
+        output_dir = os.path.join(rospack.get_path('image_processing'), self.output_dir)
         os.makedirs(output_dir, exist_ok=True)
 
         intermediate_dir = os.path.join(output_dir, 'intermediate')
@@ -114,8 +114,8 @@ class ROSImageStitcher:
         # Initialize the stitcher
         stitcher = Stitcher()
 
-        h1_path = os.path.join(rospack.get_path('object_detection'), self.h1_path) if self.h1_path else None
-        h2_path = os.path.join(rospack.get_path('object_detection'), self.h2_path) if self.h2_path else None
+        h1_path = os.path.join(rospack.get_path('image_processing'), self.h1_path) if self.h1_path else None
+        h2_path = os.path.join(rospack.get_path('image_processing'), self.h2_path) if self.h2_path else None
         rospy.loginfo(f"Using homography files: {h1_path}, {h2_path}")
         H1 = np.load(h1_path) if h1_path and os.path.exists(h1_path) else None
         H2 = np.load(h2_path) if h2_path and os.path.exists(h2_path) else None
@@ -174,7 +174,7 @@ class ROSImageStitcher:
         while not rospy.is_shutdown():
             self.process_images()
             rate.sleep()
-        create_video_from_images(os.path.join(rospack.get_path('object_detection'), self.output_dir, 'stitched_videos'), 'stitched_video.mp4')
+        create_video_from_images(os.path.join(rospack.get_path('image_processing'), self.output_dir, 'stitched_videos'), 'stitched_video.mp4')
 
 
 if __name__ == '__main__':

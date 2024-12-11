@@ -1,6 +1,6 @@
 <launch>
 
-    <node name="image_sticher_queue" pkg="object_detection" type="image_stitcher_queue.py" output="screen">
+    <node name="image_sticher_queue" pkg="image_processing" type="image_stitcher_queue.py" output="screen">
         <param name="sub_camera_topic_left" value="/camera_left/color/image_raw/compressed"/>
         <param name="sub_camera_topic_mid" value="/camera_middle/color/image_raw/compressed"/>
         <param name="sub_camera_topic_right" value="/camera_right/color/image_raw/compressed"/>

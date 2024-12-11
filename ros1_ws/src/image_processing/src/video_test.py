@@ -55,5 +55,5 @@ if __name__ == '__main__':
     video_path = rospy.get_param('~video_path', 'source_video/2024-10-23-20-57-55_mid.mp4')  # Default path if not provided
     camera_topic = rospy.get_param('~pub_camera_topic', '/camera/image_raw/compressed')  # Default topic if not provided
     rospack = rospkg.RosPack()
-    video_path = os.path.join(rospack.get_path('object_detection'), video_path)
+    video_path = os.path.join(rospack.get_path('image_processing'), video_path)
     publish_video(video_path, camera_topic)

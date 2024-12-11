@@ -58,7 +58,7 @@ class ROSImageStitcher:
             rospy.loginfo("Skipping stitching due to missing images.")
             return None
 
-        output_dir = os.path.join(rospack.get_path('object_detection'), self.output_dir)
+        output_dir = os.path.join(rospack.get_path('image_processing'), self.output_dir)
         os.makedirs(output_dir, exist_ok=True)
 
         intermediate_dir = os.path.join(output_dir, 'intermediate')
@@ -69,8 +69,8 @@ class ROSImageStitcher:
         # Initialize the stitcher
         stitcher = Stitcher()
 
-        h1_path = os.path.join(rospack.get_path('object_detection'), self.h1_path) if self.h1_path else None
-        h2_path = os.path.join(rospack.get_path('object_detection'), self.h2_path) if self.h2_path else None
+        h1_path = os.path.join(rospack.get_path('image_processing'), self.h1_path) if self.h1_path else None
+        h2_path = os.path.join(rospack.get_path('image_processing'), self.h2_path) if self.h2_path else None
         H1 = np.load(h1_path) if h1_path and os.path.exists(h1_path) else None
         H2 = np.load(h2_path) if h2_path and os.path.exists(h2_path) else None
 

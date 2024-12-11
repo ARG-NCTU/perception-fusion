@@ -1,6 +1,6 @@
 <launch>
     <arg name="video_path" default="source_video/Tainan_search_lifebuoy_detr_detection.mp4"/>
-    <node name="video_publisher_test" pkg="object_detection" type="video_test.py" output="screen">
+    <node name="video_publisher_test" pkg="image_processing" type="video_test.py" output="screen">
         <param name="video_path" value="$(arg video_path)"/>
         <param name="pub_camera_topic" value="/detr_object_detection/detection_result_img/camera_stitched/compressed"/>
     </node>
