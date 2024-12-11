@@ -119,7 +119,7 @@ RUN apt-get update && apt-get install -y \
     libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
     && rm -rf /var/lib/apt/lists/*
 
-##################################### PIP ######################################
+##################################### bag to tools ######################################
 
 RUN mkdir -p /home/${USER}/.cache/pip && chown -R ${USER}:${USER} /home/${USER}/.cache/pip
 RUN pip3 install --upgrade pip setuptools
@@ -127,6 +127,15 @@ RUN pip3 install --upgrade pip setuptools
 RUN python3 -m pip install --upgrade \
     gpxpy \
     tqdm 
+
+###################################### cv ################################
+
+RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
+    && apt-get -o Acquire::ForceIPv4=true install -yq --no-install-recommends \
+    python3-opencv 
+
+RUN python3 -m pip install --upgrade \
+    opencv-python
 
 ##################################### setting ##########################################
 
