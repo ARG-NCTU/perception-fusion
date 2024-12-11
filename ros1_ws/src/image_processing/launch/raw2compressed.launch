@@ -1,0 +1,21 @@
+<launch>
+
+    <node name="raw_to_compressed_flip_with_param1" pkg="image_processing" type="raw2compressed.py" output="screen">
+        <param name="sub_camera_topic" value="/camera1/color/image_raw"/>
+        <param name="pub_camera_topic" value="/camera_left/color/image_raw/compressed"/>
+        <param name="flip" value="false"/>
+    </node>
+
+    <node name="raw_to_compressed_flip_with_param2" pkg="image_processing" type="raw2compressed.py" output="screen">
+        <param name="sub_camera_topic" value="/camera2/color/image_raw"/>
+        <param name="pub_camera_topic" value="/camera_middle/color/image_raw/compressed"/>
+        <param name="flip" value="false"/>
+    </node>
+
+    <node name="raw_to_compressed_flip_with_param3" pkg="image_processing" type="raw2compressed.py" output="screen">
+        <param name="sub_camera_topic" value="/camera3/color/image_raw"/>
+        <param name="pub_camera_topic" value="/camera_right/color/image_raw/compressed"/>
+        <param name="flip" value="false"/>
+    </node>
+
+</launch>
