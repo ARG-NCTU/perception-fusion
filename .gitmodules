@@ -1,13 +1,6 @@
 [submodule "ros2_ros1_bridge_ws/src/ros1_bridge"]
 	path = ros2_ws/src/ros1_bridge
 	url = git@github.com:ARG-NCTU/ros1_bridge.git
-[submodule "ros1_ws/src/realsense-ros"]
-	path = ros1_ws/src/realsense-ros
-	url = git@github.com:ARG-NCTU/realsense-ros.git
-	branch = ros1-legacy
-[submodule "ros1_ws/src/librealsense"]
-	path = ros1_ws/src/librealsense
-	url = git@github.com:ARG-NCTU/librealsense.git
 [submodule "ros1_ws/src/nuscenes_visualize"]
 	path = ros1_ws/src/nuscenes_visualize
 	url = git@github.com:ARG-NCTU/nuscenes_visualize.git
@@ -18,8 +11,4 @@
 [submodule "ros2_ws/src/realsense-ros"]
 	path = ros2_ws/src/realsense-ros
 	url = git@github.com:ARG-NCTU/realsense-ros.git
-	branch = ros2-master
-[submodule "ros2_ws/src/librealsense"]
-	path = ros2_ws/src/librealsense
-	url = git@github.com:ARG-NCTU/librealsense.git
 	branch = ros2-master
