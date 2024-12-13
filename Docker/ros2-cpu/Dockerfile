@@ -109,25 +109,6 @@ RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
 RUN python3 -m pip install --upgrade \
     opencv-python
 
-####################################### librealsense ######################################
-
-# RUN sudo apt-get install -y linux-headers-$(uname -r)
-
-# # Add the Intel RealSense repository key
-# RUN sudo mkdir -p /etc/apt/keyrings && \
-#     curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | sudo tee /etc/apt/keyrings/librealsense.pgp > /dev/null
-
-# # Add the Intel RealSense repository
-# RUN echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | \
-#     sudo tee /etc/apt/sources.list.d/librealsense.list && \
-#     sudo apt-get update
-
-# # Install librealsense packages
-# RUN sudo apt-get install -y librealsense2-dkms librealsense2-utils librealsense2-dev librealsense2-dbg
-
-# # Verify kernel updates for RealSense
-# RUN modinfo uvcvideo | grep "version:" || true
-
 #################################### pointcloud_processing ###################################
 
 RUN python3 -m pip install --upgrade \
@@ -160,12 +141,3 @@ CMD ["/bin/bash"]
 ######################################### librealsense ########################################
 
 RUN cd ${HOME} && python3 -m pip install --upgrade 'setuptools<65.0'
-# Change this to build while running the container
-# ENV LIBREALSENSE_VERSION 2.55.1
-# RUN cd ${HOME} && git clone https://github.com/IntelRealSense/librealsense.git \
-#     && cd librealsense \
-#     && git checkout v${LIBREALSENSE_VERSION} \
-#     && mkdir build \
-#     && cd build \
-#     && cmake .. \
-#     && sudo make install
