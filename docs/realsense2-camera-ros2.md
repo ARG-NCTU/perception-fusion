@@ -120,6 +120,34 @@ source environment_ros2.sh
 ros2 launch realsense2_camera side_camera_launch.py config_file:=yaml/rs_launch_3.yaml
 ```
 
+### Visualize Camera Topics
+
+1. Docker Join
+
+```bash
+source Docker/ros2-cpu/run.sh
+```
+
+2. Source ROS2 Environment
+
+```bash
+source environment_ros2.sh
+```
+
+3. Visualization
+
+3.1. Visualize raw image msg in Rviz2
+
+```bash
+rviz2 -d rviz2/camera-example.rviz
+```
+
+3.2. Visualize compressed image msg in rqt_image_view
+
+```bash
+ros2 run rqt_image_view rqt_image_view 
+```
+
 ### ROS2 Bag Recording
 
 1. Docker Join
@@ -138,4 +166,30 @@ source environment_ros2.sh
 
 ```bash
 source ros2bag/record_images.sh
+```
+
+### ROS2 Bag Playing Example
+
+1. Docker Join
+
+```bash
+source Docker/ros2-cpu/run.sh
+```
+
+2. Source ROS2 Environment
+
+```bash
+source environment_ros2.sh
+```
+
+3. Enter Directory of bag for example
+
+```bash
+cd bags/images-2024_1213_1533
+```
+
+3. Play ROS2 Bag for example
+
+```bash
+ros2 bag play images-2024_1213_1533_0.db3 
 ```
