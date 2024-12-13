@@ -71,7 +71,7 @@ roscore
 source Docker/ros1-cpu/join.sh
 ```
 
-2. Source ROS1 & ROS2 Environment
+2. Source ROS1 Environment
 
 ```bash
 source environment_ros1.sh

@@ -109,57 +109,6 @@ source environment_ros1.sh
 
 3. Run ROS1 package
 
-3.1. Run Realsense Camera Example
-
-Search D435 camera Serial number
-```bash
-rs-enumerate-devices -s
-```
-
-3.1.1. Run 1 camera
-
-Modify Serial number in 1 camera Launch File
-```bash
-rosed realsense2_camera side_camera_1.launch
-```
-
-Launch 1 camera
-```bash
-roslaunch realsense2_camera side_camera_1.launch
-```
-
-3.1.2. Run 3 camera
-
-Modify Serial number in 3 camera Launch File
-```bash
-rosed realsense2_camera side_camera_3.launch
-```
-
-ros2 launch realsense2_camera 
-
-
-
-
-ros2 launch realsense2_camera side_camera_launch.py config_file:=/home/arg/perception-fusion/ros2_ws/src/realsense-ros/realsense2_camera/yaml/rs_launch_1.yaml
-
-
-ros2 launch realsense2_camera side_camera_launch.py config_file:=/home/arg/perception-fusion/ros2_ws/src/realsense-ros/realsense2_camera/yaml/rs_launch_3.yaml
-
-
-git submodule deinit -f -- realsense-ros
-git rm -f librealsense
-rm -rf .git/modules/librealsense
-
-
-
-Launch 3 camera
-```bash
-roslaunch realsense2_camera side_camera_3.launch
-```
-
-
-3.2. Run ROS1 Bag Example
-
 Image Bag
 ```bash
 cd bags/images-2024-11-23-15-28-41/
