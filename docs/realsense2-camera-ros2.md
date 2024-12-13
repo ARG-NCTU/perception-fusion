@@ -56,19 +56,25 @@ source Docker/ros2-cpu/run.sh
 source environment_ros2.sh
 ```
 
-3. Edit yaml file (Optional)
+3. Search Serial Number
+
+```bash
+rs-enumerate-devices -s
+```
+
+4. Edit Serial Number in yaml file
 
 ```bash
 /home/arg/perception-fusion/ros2_ws/src/realsense-ros/realsense2_camera/yaml/rs_launch_1.yaml
 ```
 
-4. Building Realsense ROS2 package
+5. Building Realsense ROS2 package
 
 ```bash
 source build_ros2_camera.sh
 ```
 
-5. Run Realsense Node
+6. Run Realsense Node
 
 ```bash
 ros2 launch realsense2_camera side_camera_launch.py config_file:=yaml/rs_launch_1.yaml
@@ -88,7 +94,7 @@ source Docker/ros2-cpu/run.sh
 source environment_ros2.sh
 ```
 
-3. Edit yaml file (Optional)
+3. Edit Serial Number in yaml file
 
 ```bash
 /home/arg/perception-fusion/ros2_ws/src/realsense-ros/realsense2_camera/yaml/rs_launch_3.yaml
