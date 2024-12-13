@@ -5,7 +5,7 @@ ROS2-ROS1-Bridge Guide
 ## Clone repo 
 
 ```
-git clone --recursive --branch bridge-realsense git@github.com:ARG-NCTU/perception-fusion.git
+git clone --recursive git@github.com:ARG-NCTU/perception-fusion.git
 ``` 
 
 ## Update repo and submodules
