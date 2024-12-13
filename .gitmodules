@@ -12,3 +12,7 @@
 	path = ros2_ws/src/realsense-ros
 	url = git@github.com:ARG-NCTU/realsense-ros.git
 	branch = ros2-master
+[submodule "librealsense"]
+	path = librealsense
+	url = git@github.com:ARG-NCTU/librealsense.git
+	branch = v2.55.1
