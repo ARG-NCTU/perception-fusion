@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lsb-release \
     build-essential \
     python3-pip \
+    sudo \
     git \
     wget \
     vim \
@@ -60,11 +61,6 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
     ros-${ROS1_DISTRO}-rosbridge-suite \
     ros-${ROS1_DISTRO}-cv-bridge \
     ros-${ROS1_DISTRO}-rosbag \
-    ros-${ROS1_DISTRO}-rviz-imu-plugin \
-    ros-${ROS1_DISTRO}-realsense2-camera \
-    ros-${ROS1_DISTRO}-rgbd-launch \
-    ros-${ROS1_DISTRO}-mavros \
-    ros-${ROS1_DISTRO}-mavros-msgs \
     python3-catkin-tools \
     python3-rosdep \
     python3-rosinstall \
@@ -112,37 +108,13 @@ RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu foca
     && rosdep init && rosdep update && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-######################################## realsense ########################################
-
-RUN apt-get update && apt-get install -y \
-    libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
-    libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
-    && rm -rf /var/lib/apt/lists/*
-
-##################################### bag to tools ######################################
-
-RUN mkdir -p /home/${USER}/.cache/pip && chown -R ${USER}:${USER} /home/${USER}/.cache/pip
-RUN pip3 install --upgrade pip setuptools
-
-RUN python3 -m pip install --upgrade \
-    gpxpy \
-    tqdm 
-
-###################################### cv ################################
-
-RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
-    && apt-get -o Acquire::ForceIPv4=true install -yq --no-install-recommends \
-    python3-opencv 
-
-RUN python3 -m pip install --upgrade \
-    opencv-python
-
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
 RUN echo "${USER} ALL=(ALL)  ALL" >> /etc/sudoers
 RUN echo "source /opt/ros/${ROS1_DISTRO}/setup.bash" >> /etc/bash.bashrc
 RUN echo "source /opt/ros/${ROS2_DISTRO}/setup.bash" >> /etc/bash.bashrc
+RUN echo "arg ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER ${USER}
 WORKDIR ${HOME}
