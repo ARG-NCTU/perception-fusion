@@ -105,3 +105,23 @@ source build_ros2_camera.sh
 ```bash
 ros2 launch realsense2_camera side_camera_launch.py config_file:=yaml/rs_launch_3.yaml
 ```
+
+### ROS2 Bag Recording
+
+1. Docker Join
+
+```bash
+source Docker/ros2-cpu/run.sh
+```
+
+2. Source ROS2 Environment
+
+```bash
+source environment_ros2.sh
+```
+
+3. Record ROS2 Bag
+
+```bash
+source ros2bag/record_images.sh
+```
