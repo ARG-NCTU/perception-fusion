@@ -15,4 +15,4 @@
 [submodule "librealsense"]
 	path = librealsense
 	url = git@github.com:ARG-NCTU/librealsense.git
-	branch = v2.55.1
+	branch = ros2-master

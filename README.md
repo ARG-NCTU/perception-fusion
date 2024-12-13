@@ -80,8 +80,7 @@ source Docker/ros1-ros2/run.sh
 2. Source ROS1 & ROS2 Environment
 
 ```bash
-source environment_ros1.sh
-source environment_ros2.sh
+source environment_ros2_ros1_bridge.sh
 ```
 
 3. Run Ros1_bridge
@@ -135,6 +134,23 @@ Modify Serial number in 3 camera Launch File
 ```bash
 rosed realsense2_camera side_camera_3.launch
 ```
+
+ros2 launch realsense2_camera 
+
+
+
+
+ros2 launch realsense2_camera side_camera_launch.py config_file:=/home/arg/perception-fusion/ros2_ws/src/realsense-ros/realsense2_camera/yaml/rs_launch_1.yaml
+
+
+ros2 launch realsense2_camera side_camera_launch.py config_file:=/home/arg/perception-fusion/ros2_ws/src/realsense-ros/realsense2_camera/yaml/rs_launch_3.yaml
+
+
+git submodule deinit -f -- realsense-ros
+git rm -f librealsense
+rm -rf .git/modules/librealsense
+
+
 
 Launch 3 camera
 ```bash
