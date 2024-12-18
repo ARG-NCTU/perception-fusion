@@ -91,7 +91,7 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o 
 ######################################## realsense-ros2 ########################################
 RUN python3 -m pip install --upgrade \
     importlib_metadata \
-    setuptools \
+    'setuptools<70.0' \
     pytest
 
 ##################################### bag to tools ######################################
@@ -102,8 +102,7 @@ RUN python3 -m pip install --upgrade \
 
 ###################################### cv ################################
 
-RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
-    && apt-get -o Acquire::ForceIPv4=true install -yq --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-opencv 
 
 RUN python3 -m pip install --upgrade \
@@ -111,21 +110,16 @@ RUN python3 -m pip install --upgrade \
 
 #################################### pointcloud_processing ###################################
 
-RUN python3 -m pip install --upgrade \
-    numpy \
-    rosbag2 \
-    matplotlib \
-    scipy \
-    scikit-learn \
-    scikit-image \
-    pandas \
-    open3d \
-    pyntcloud \
-    pptk \
-    pyntcloud \
-    open3d \
-    pyntcloud \
-    pptk
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-rclpy \
+    ros-${ROS_DISTRO}-sensor-msgs-py \
+    ros-${ROS_DISTRO}-cv-bridge \
+    ros-${ROS_DISTRO}-tf2-ros \
+    python3-numpy \
+    libpcl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN sudo -H pip install transforms3d
 
 ##################################### setting ##########################################
 
@@ -137,7 +131,3 @@ RUN echo "arg ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER ${USER}
 WORKDIR ${HOME}
 CMD ["/bin/bash"]
-
-######################################### librealsense ########################################
-
-RUN cd ${HOME} && python3 -m pip install --upgrade 'setuptools<65.0'
