@@ -64,7 +64,29 @@ source environment_ros2.sh
 ros2 launch pointcloud_processing combined_pointcloud_processing.launch.py
 ```
 
-### Terminal 2: Rviz2 to Visualize Transformed Radar Message
+### Terminal 2: Play Radar Ros2 Bag
+
+1. Docker Run
+
+```bash
+source Docker/ros2-cpu/run.sh
+```
+
+2. Source ROS2 Environment
+
+```bash
+source environment_ros2.sh
+```
+
+3. Play ROS2 Bag for example
+
+Ros2 Bag NAS [Link](http://gofile.me/773h8/rf6BFgCfG)
+
+```bash
+ros2 bag play bags/20241129_cropped/processed_rosbag_halo_20241205-145227/processed_rosbag_halo_20241205-145227_0.db3
+```
+
+### Terminal 3: Rviz2 to Visualize Transformed Radar Message
 
 1. Docker Run
 
@@ -84,7 +106,7 @@ source environment_ros2.sh
 rviz2 -d rviz2/radar-transformed-with-pose.rviz 
 ```
 
-### Terminal 3: Rviz2 to Visualize Original Radar Message
+### Terminal 4: Rviz2 to Visualize Original Radar Message
 
 1. Docker Run
 
