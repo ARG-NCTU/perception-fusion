@@ -17,3 +17,9 @@ docs/realsense2-camera-ros2.md
 ```bash
 docs/visualize_nuscene.md
 ```
+
+## PointCloud Processing Guide
+
+```bash
+docs/pointcloud-processing.md
+```
