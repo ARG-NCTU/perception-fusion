@@ -20,6 +20,8 @@ class PointCloud2Image(Node):
         self.declare_parameter('save_images', False)
         self.declare_parameter('save_directory', '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images')
         self.declare_parameter('range', 120.0)  # Define range in meters for normalization
+        self.declare_parameter('use_grayscale', False)  # Use grayscale visualization if True
+        self.declare_parameter('circle_radius', 3)  # Circle radius for visualization
 
         # Get parameters
         self.pointcloud_topic = self.get_parameter('pointcloud_topic').value
@@ -27,6 +29,8 @@ class PointCloud2Image(Node):
         self.save_images = self.get_parameter('save_images').value
         self.save_directory = self.get_parameter('save_directory').value
         self.range = self.get_parameter('range').value
+        self.use_grayscale = self.get_parameter('use_grayscale').value
+        self.circle_radius = self.get_parameter('circle_radius').value
 
         # Create the save directory if needed
         if self.save_images:
@@ -45,7 +49,7 @@ class PointCloud2Image(Node):
         self.image_counter = 0  # Counter for saved images
 
     def process_pointcloud(self, msg):
-        # Read points from PointCloud2f
+        # Read points from PointCloud2
         field_names = [field.name for field in msg.fields]
         points = list(pc2.read_points(msg, field_names=tuple(field_names), skip_nans=True))
         # self.get_logger().info(f"Read {len(points)} points from PointCloud2.")
@@ -61,7 +65,7 @@ class PointCloud2Image(Node):
         xyz = points_array[:, :3]  # Extract (x, y, z)
         intensity = points_array[:, 3] if points_array.shape[1] > 3 else None
 
-        # Generate an intensity image with a rainbow colormap
+        # Generate an intensity image with a rainbow colormap or grayscale
         img_width = 480
         img_height = 480
         intensity_image = np.zeros((img_height, img_width, 3), dtype=np.uint8)
@@ -70,8 +74,6 @@ class PointCloud2Image(Node):
         range_min, range_max = -self.range, self.range
 
         if intensity is not None:
-            # self.get_logger().info("Drawing points with intensity")
-            # Normalize intensity for better visualization
             intensity_normalized = (intensity - intensity.min()) / (intensity.max() - intensity.min())
             for i, (x, y, z) in enumerate(xyz):
                 # Normalize x and y to image pixels, with the center of the image as 0, 0
@@ -79,23 +81,25 @@ class PointCloud2Image(Node):
                 v = int((y - range_min) / (range_max - range_min) * img_height - img_height / 2)
                 u += img_width // 2  # Shift the center to the middle of the image
                 v += img_height // 2
-                # # self.get_logger().info(f"u: {u}, v: {v}")
+                # self.get_logger().info(f"u: {u}, v: {v}")
                 if 0 <= u < img_width and 0 <= v < img_height:
-                    color = cv2.applyColorMap(
-                        np.uint8(intensity_normalized[i] * 255).reshape((1, 1)),
-                        cv2.COLORMAP_JET
-                    )[0, 0]  # Apply rainbow colormap
-                    cv2.circle(intensity_image, (u, v), 3, tuple(map(int, color)), -1)  # Draw larger points
+                    if self.use_grayscale:
+                        gray_value = int(intensity_normalized[i] * 255)
+                        color = (gray_value, gray_value, gray_value)
+                    else:
+                        color = cv2.applyColorMap(
+                            np.uint8(intensity_normalized[i] * 255).reshape((1, 1)),
+                            cv2.COLORMAP_JET
+                        )[0, 0]  # Apply rainbow colormap
+                    cv2.circle(intensity_image, (u, v), self.circle_radius, tuple(map(int, color)), -1)
         else:
-            # self.get_logger().info("Drawing points without intensity")
-            # Draw points as white if intensity is None
             for (x, y, z) in xyz:
                 u = int((x - range_min) / (range_max - range_min) * img_width - img_width / 2)
                 v = int((y - range_min) / (range_max - range_min) * img_height - img_height / 2)
                 u += img_width // 2  # Shift the center to the middle of the image
                 v += img_height // 2
                 if 0 <= u < img_width and 0 <= v < img_height:
-                    cv2.circle(intensity_image, (u, v), 3, (255, 255, 255), -1)  # White color for points
+                    cv2.circle(intensity_image, (u, v), self.circle_radius, (255, 255, 255), -1)  # White color for points
 
         # Compress the image
         _, compressed_image = cv2.imencode('.jpg', intensity_image)

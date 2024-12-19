@@ -13,9 +13,11 @@ def generate_launch_description():
                 {'image_topic': '/halo_radar/radar_image/compressed'},
                 {'save_images': True},
                 {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images'},
-                {'range': 120.0}
+                {'range': 120.0},
+                {'use_grayscale': False},
+                {'circle_radius': 3}
             ]
-        )
+        ),
     ])
 
 # ros2 launch pointcloud_processing pointcloud_to_image.launch.py
@@ -27,6 +29,8 @@ ros2 launch pointcloud_processing pointcloud_to_image.launch.py \
   -p image_topic:=/halo_radar/radar_image/compressed \
   -p save_images:=True \
   -p save_directory:=/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images \
-  -p range:=120.0
+  -p range:=120.0 \
+  -p use_grayscale:=False \
+  -p circle_radius:=3
 '''
 

@@ -79,7 +79,9 @@ def generate_launch_description():
                 {'image_topic': '/halo_radar/radar_image/compressed'},
                 {'save_images': True},
                 {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images'},
-                {'range': 120.0}
+                {'range': 120.0},
+                {'use_grayscale': True},
+                {'circle_radius': 3}
             ]
         ),
 
