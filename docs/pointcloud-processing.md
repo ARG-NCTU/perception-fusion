@@ -125,3 +125,23 @@ source environment_ros2.sh
 ```bash
 rviz2 -d rviz2/radar-cropped-example.rviz 
 ```
+
+### Terminal 5: rqt_image_view to Visualize Radar Compressed Image
+
+1. Docker Run
+
+```bash
+source Docker/ros2-cpu/run.sh
+```
+
+2. Source ROS2 Environment
+
+```bash
+source environment_ros2.sh
+```
+
+3. rqt_image_view
+
+```bash
+ros2 run rqt_image_view rqt_image_view
+```

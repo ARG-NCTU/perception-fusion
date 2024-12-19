@@ -80,7 +80,7 @@ def generate_launch_description():
                 {'save_images': True},
                 {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images'},
                 {'range': 120.0},
-                {'use_grayscale': True},
+                {'use_grayscale': False},
                 {'circle_radius': 3}
             ]
         ),
