@@ -33,8 +33,10 @@ setup(
             'fake_pose_publisher = pointcloud_processing.fake_pose_publisher:main',
             'dynamic_broadcaster = pointcloud_processing.dynamic_broadcaster:main',
             'transform_pointcloud = pointcloud_processing.transform_pointcloud:main',
+            'transform_laserscan = pointcloud_processing.transform_laserscan:main',
             'pointcloud_to_image = pointcloud_processing.pointcloud_to_image:main',
             'save_pointcloud = pointcloud_processing.save_pointcloud:main',
+            'laserscan_qos = pointcloud_processing.laserscan_qos:main',
         ],
     },
 )
