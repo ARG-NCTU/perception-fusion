@@ -24,7 +24,7 @@ def generate_launch_description():
                 {'static_frame_id': 'map'},
                 {'dynamic_pose': '/wamv/localization/pose'},
                 {'parent_frame_id': 'map'},
-                {'child_frame_id': 'base_link'}
+                {'child_frame_id': 'base_link'},
             ]
         ),
 
@@ -42,35 +42,58 @@ def generate_launch_description():
             ]
         ),
 
-        # # PointCloud2 to Image Node
-        # Node(
-        #     package='pointcloud_processing',
-        #     executable='pointcloud_to_image',
-        #     name='pointcloud_to_image',
-        #     output='screen',
-        #     parameters=[
-        #         {'pointcloud_topic': '/halo_radar/cropped_pointcloud'},
-        #         {'image_topic': '/halo_radar/radar_image/compressed'},
-                # {'parent_frame_id': 'radar_base_link'},
-                # {'child_frame_id': 'radar'},
-        #         {'save_images': True},
-        #         {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images'}
-        #     ]
-        # ),
+        # Transform LaserScan Node
+        Node(
+            package='pointcloud_processing',
+            executable='transform_laserscan',
+            name='transform_laserscan',
+            output='screen',
+            parameters=[
+                {'sub_laserscan_topic': '/halo_radar/cropped_scan'},
+                {'pub_laserscan_topic': '/halo_radar/transformed_scan'},
+                {'parent_frame_id': 'map'},
+                {'child_frame_id': 'base_link'}
+            ]
+        ),
 
-        # # Save PointCloud Node
-        # Node(
-        #     package='pointcloud_processing',
-        #     executable='save_pointcloud',
-        #     name='save_pointcloud',
-        #     output='screen',
-        #     parameters=[
-        #         {'pointcloud_topic': '/halo_radar/cropped_pointcloud'},
-        #         {'parent_frame_id': 'radar_base_link'},
-        #         {'child_frame_id': 'radar'},
-        #         {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_pcds'}
-        #     ]
-        # )
+        # LaserScan qos
+        Node(
+            package='pointcloud_processing',
+            executable='laserscan_qos',
+            name='laserscan_qos',
+            output='screen',
+            parameters=[
+                {'sub_laserscan_topic', '/halo_radar/cropped_scan'},
+                {'pub_laserscan_topic', '/halo_radar/republished_scan'}
+            ]
+        ),
+
+        # PointCloud2 to Image Node
+        Node(
+            package='pointcloud_processing',
+            executable='pointcloud_to_image',
+            name='pointcloud_to_image',
+            output='screen',
+            parameters=[
+                {'pointcloud_topic': '/halo_radar/transformed_pointcloud'},
+                {'image_topic': '/halo_radar/radar_image/compressed'},
+                {'save_images': True},
+                {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images'},
+                {'range': 120.0}
+            ]
+        ),
+
+        # Save PointCloud Node
+        Node(
+            package='pointcloud_processing',
+            executable='save_pointcloud',
+            name='save_pointcloud',
+            output='screen',
+            parameters=[
+                {'pointcloud_topic': '/halo_radar/transformed_pointcloud'},
+                {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_pcds'}
+            ]
+        )
     ])
 
 # ros2 launch pointcloud_processing combined_pointcloud_processing.launch.py

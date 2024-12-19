@@ -9,12 +9,11 @@ def generate_launch_description():
             name='pointcloud_to_image',
             output='screen',
             parameters=[
-                {'pointcloud_topic': '/halo_radar/cropped_pointcloud'},
+                {'pointcloud_topic': '/halo_radar/transformed_pointcloud'},
                 {'image_topic': '/halo_radar/radar_image/compressed'},
-                {'parent_frame_id': 'radar_global_map'},
-                {'child_frame_id': 'radar'},
                 {'save_images': True},
-                {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images'}
+                {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images'},
+                {'range': 120.0}
             ]
         )
     ])
@@ -26,9 +25,8 @@ ros2 launch pointcloud_processing pointcloud_to_image.launch.py \
   --ros-args \
   -p pointcloud_topic:=/halo_radar/cropped_pointcloud \
   -p image_topic:=/halo_radar/radar_image/compressed \
-  -p parent_frame_id:=radar_global_map \
-  -p child_frame_id:=radar \
   -p save_images:=True \
-  -p save_directory:=/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images
+  -p save_directory:=/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images \
+  -p range:=120.0
 '''
 

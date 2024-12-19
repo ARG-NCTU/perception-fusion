@@ -9,9 +9,7 @@ def generate_launch_description():
             name='save_pointcloud',
             output='screen',
             parameters=[
-                {'pointcloud_topic': '/halo_radar/cropped_pointcloud'},
-                {'parent_frame_id': 'radar_global_map'},
-                {'child_frame_id': 'radar'},
+                {'pointcloud_topic': '/halo_radar/transformed_pointcloud'},
                 {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_pcds'}
             ]
         )
@@ -22,8 +20,6 @@ def generate_launch_description():
 '''
 ros2 launch pointcloud_processing save_pointcloud.launch.py \
     --ros-args \
-    -p pointcloud_topic:=/halo_radar/cropped_pointcloud \
-    -p parent_frame_id:=radar_global_map \
-    -p child_frame_id:=radar \
+    -p pointcloud_topic:=/halo_radar/transformed_pointcloud \
     -p save_directory:=/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_pcds
 '''

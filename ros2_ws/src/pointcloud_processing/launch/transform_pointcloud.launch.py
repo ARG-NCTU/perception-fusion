@@ -12,7 +12,7 @@ def generate_launch_description():
                 {'sub_radar_topic': '/halo_radar/cropped_pointcloud'},
                 {'pub_radar_topic': '/halo_radar/transformed_pointcloud'},
                 {'parent_frame_id': 'map'},
-                {'child_frame_id': 'base_link'}
+                {'child_frame_id': 'base_link'},
             ]
         )
     ])
@@ -25,5 +25,5 @@ ros2 launch pointcloud_processing transform_pointcloud.launch.py \
     -p sub_radar_topic:=/halo_radar/cropped_pointcloud \
     -p pub_radar_topic:=/halo_radar/transformed_pointcloud \
     -p parent_frame_id:=map \
-    -p child_frame_id:=base_link
+    -p child_frame_id:=base_link \
 '''
