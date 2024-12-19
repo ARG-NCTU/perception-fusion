@@ -2,6 +2,7 @@
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy
 from sensor_msgs.msg import PointCloud2
 from sensor_msgs_py.point_cloud2 import read_points, create_cloud
 from tf2_ros import Buffer, TransformListener
@@ -10,11 +11,11 @@ import numpy as np
 
 class TransformPointcloud(Node):
     def __init__(self):
-        super().__init__('transform_pointcloud') # Initialize the node
+        super().__init__('transform_pointcloud')  # Initialize the node
 
         # Declare parameters
         self.declare_parameter('sub_radar_topic', '/halo_radar/cropped_pointcloud')  # Input topic
-        self.declare_parameter('pub_radar_topic', '/halo_radar/transformed_pointcloud')  # Output topic
+        self.declare_parameter('pub_radar_topic', '/halo_radar/transformed_radar')  # Output topic
         self.declare_parameter('parent_frame_id', 'map')  # Parent frame
         self.declare_parameter('child_frame_id', 'base_link')  # Target child frame
 
@@ -24,24 +25,30 @@ class TransformPointcloud(Node):
         self.parent_frame_id = self.get_parameter('parent_frame_id').get_parameter_value().string_value
         self.child_frame_id = self.get_parameter('child_frame_id').get_parameter_value().string_value
 
-        # TF2 Buffer and Listener
+        # Set QoS Profile (Dynamic)
+        self.qos = QoSProfile(
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            depth=10
+        )
+
+        self.qos_pub = QoSProfile(
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            depth=10
+        )
+
+        # TF2 Buffer and Listener (used only for PointCloud2)
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         # Subscribers and Publishers
-        self.pointcloud_sub = self.create_subscription(
+        self.radar_sub = self.create_subscription(
             PointCloud2,
             self.sub_radar_topic,
             self.pointcloud_callback,
-            10
+            self.qos
         )
-        self.pointcloud_pub = self.create_publisher(
-            PointCloud2,
-            self.pub_radar_topic,
-            10
-        )
-
-        self.get_logger().info(f"Subscribed to {self.sub_radar_topic}, publishing to {self.pub_radar_topic}")
+        self.radar_pub = self.create_publisher(PointCloud2, self.pub_radar_topic, self.qos_pub)
+        self.get_logger().info(f"Subscribed to PointCloud2 topic: {self.sub_radar_topic}, publishing to {self.pub_radar_topic}")
 
     def pointcloud_callback(self, msg):
         """
@@ -51,16 +58,19 @@ class TransformPointcloud(Node):
             # Log fields in the incoming PointCloud2 message
             field_names = [field.name for field in msg.fields]
             self.get_logger().info(f"Fields in incoming PointCloud2 message: {field_names}")
-
-            # Determine if intensity is available
-            has_intensity = 'intensity' in field_names
+            self.get_logger().info(f"Incoming PointCloud2 frame_id: {msg.header.frame_id}")
 
             # Get the latest transform between parent_frame_id and child_frame_id
             transform = self.tf_buffer.lookup_transform(
                 self.parent_frame_id,
-                self.child_frame_id,  # Use child_frame_id from the message
-                rclpy.time.Time()  # Get the latest available transform
+                self.child_frame_id,
+                rclpy.time.Time()
             )
+
+            # Log transform details
+            self.get_logger().info(f"Transform details: {self.parent_frame_id} -> {self.child_frame_id}")
+            self.get_logger().info(f"Translation: {transform.transform.translation}")
+            self.get_logger().info(f"Rotation: {transform.transform.rotation}")
 
             # Extract translation and rotation from the transform
             translation = np.array([
@@ -83,13 +93,13 @@ class TransformPointcloud(Node):
 
             # Separate the 3D points and intensity if available
             xyz = points_array[:, :3]  # Extract (x, y, z)
-            intensity = points_array[:, 3] if has_intensity else None
+            intensity = points_array[:, 3] if 'intensity' in field_names else None
 
             # Apply transformation: rotate + translate points
             transformed_xyz = np.dot(xyz, rotation_matrix.T) + translation
 
             # Combine transformed points with intensity if available
-            if has_intensity:
+            if intensity is not None:
                 transformed_points = np.hstack((transformed_xyz, intensity.reshape(-1, 1)))
             else:
                 transformed_points = transformed_xyz
@@ -101,39 +111,26 @@ class TransformPointcloud(Node):
             transformed_cloud.header.frame_id = self.parent_frame_id
 
             # Publish the transformed pointcloud
-            self.pointcloud_pub.publish(transformed_cloud)
+            self.radar_pub.publish(transformed_cloud)
             self.get_logger().info("Transformed and published PointCloud2 message.")
 
         except Exception as e:
-            self.get_logger().error(f"Failed to transform PointCloud2: {e}")
-
-    @staticmethod
-    def filter_valid_points(points, num_fields):
-        """
-        Filter out invalid points that don't have the expected number of fields.
-        """
-        valid_points = []
-        for point in points:
-            if len(point) == num_fields:
-                valid_points.append(point)
-        return valid_points
+            self.get_logger().error(f"Failed to process PointCloud2: {e}")
 
     @staticmethod
     def quaternion_to_rotation_matrix(q):
         """
         Convert a quaternion to a 3x3 rotation matrix.
         """
-        # Extract quaternion components
         x, y, z, w = q.x, q.y, q.z, q.w
 
-        # Compute the rotation matrix
         rotation_matrix = np.array([
             [1 - 2 * (y**2 + z**2), 2 * (x * y - z * w), 2 * (x * z + y * w)],
             [2 * (x * y + z * w), 1 - 2 * (x**2 + z**2), 2 * (y * z - x * w)],
             [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x**2 + y**2)],
         ])
-
         return rotation_matrix
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -142,6 +139,6 @@ def main(args=None):
     node.destroy_node()
     rclpy.shutdown()
 
+
 if __name__ == '__main__':
-    import sys
-    main(args=sys.argv)
+    main()

@@ -24,7 +24,7 @@ class FakePosePublisher(Node):
         # Set fake position (you can customize this)
         pose.pose.position.x = 0.0
         pose.pose.position.y = 0.0
-        pose.pose.position.z = 1.0
+        pose.pose.position.z = 0.0
 
         # Set fake orientation (rotating around Z-axis)
         pose.pose.orientation.x = 0.0
@@ -34,7 +34,7 @@ class FakePosePublisher(Node):
 
         self.angle = (self.angle + 0.01) % (2 * math.pi) # Increment angle
         self.publisher.publish(pose)
-        self.get_logger().info(f"Published fake pose with angle: {self.angle}")
+        # self.get_logger().info(f"Published fake pose with angle: {self.angle}")
 
 def main(args=None):
     rclpy.init(args=args)

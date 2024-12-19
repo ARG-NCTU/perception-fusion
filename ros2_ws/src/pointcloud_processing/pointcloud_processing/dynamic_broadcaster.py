@@ -56,7 +56,7 @@ class DynamicBroadcaster(Node):
 
         # Broadcast the transform
         self.tfb_.sendTransform(tfs)
-        self.get_logger().info(f"Broadcasted transform from {self.parent_frame_id} to {self.child_frame_id}")
+        # self.get_logger().info(f"Broadcasted transform from {self.parent_frame_id} to {self.child_frame_id}")
 
 def main(args=None):
     rclpy.init(args=args)
