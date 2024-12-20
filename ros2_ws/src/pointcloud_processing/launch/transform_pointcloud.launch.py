@@ -18,12 +18,3 @@ def generate_launch_description():
     ])
 
 # ros2 launch pointcloud_processing transform_pointcloud.launch.py
-
-'''
-ros2 launch pointcloud_processing transform_pointcloud.launch.py \
-    --ros-args \
-    -p sub_radar_topic:=/halo_radar/cropped_pointcloud \
-    -p pub_radar_topic:=/halo_radar/transformed_pointcloud \
-    -p parent_frame_id:=map \
-    -p child_frame_id:=base_link \
-'''

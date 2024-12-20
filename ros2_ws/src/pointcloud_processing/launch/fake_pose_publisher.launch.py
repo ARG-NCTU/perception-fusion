@@ -15,9 +15,3 @@ def generate_launch_description():
     ])
 
 # ros2 launch pointcloud_processing fake_pose_publisher.launch.py
-
-'''
-ros2 launch pointcloud_processing fake_pose_publisher.launch.py \
-  --ros-args -p pose_pub_topic:=/wamv/localization/pose
-'''
-

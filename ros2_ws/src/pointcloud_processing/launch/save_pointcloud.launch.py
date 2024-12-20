@@ -16,10 +16,3 @@ def generate_launch_description():
     ])
 
 # ros2 launch pointcloud_processing save_pointcloud.launch.py
-    
-'''
-ros2 launch pointcloud_processing save_pointcloud.launch.py \
-    --ros-args \
-    -p pointcloud_topic:=/halo_radar/transformed_pointcloud \
-    -p save_directory:=/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_pcds
-'''

@@ -19,11 +19,3 @@ def generate_launch_description():
 
 # ros2 launch pointcloud_processing dynamic_broadcaster.launch.py 
 
-'''
-ros2 launch pointcloud_processing dynamic_broadcaster.launch.py \
-    --ros-args \
-    -p dynamic_pose:=/wamv/localization/pose \
-    -p parent_frame_id:=map \
-    -p child_frame_id:=base_link
-'''
-

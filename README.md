@@ -18,8 +18,8 @@ docs/realsense2-camera-ros2.md
 docs/visualize_nuscene.md
 ```
 
-## PointCloud Processing Guide
+## PointCloud to Image Guide
 
 ```bash
-docs/pointcloud-processing.md
+pointcloud-to-image.md
 ```

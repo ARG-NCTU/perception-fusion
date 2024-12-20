@@ -9,7 +9,7 @@ def generate_launch_description():
             name='pointcloud_to_image',
             output='screen',
             parameters=[
-                {'pointcloud_topic': '/halo_radar/transformed_pointcloud'},
+                {'pointcloud_topic': '/halo_radar/cropped_pointcloud'},
                 {'image_topic': '/halo_radar/radar_image/compressed'},
                 {'save_images': True},
                 {'save_directory': '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images'},
@@ -21,16 +21,4 @@ def generate_launch_description():
     ])
 
 # ros2 launch pointcloud_processing pointcloud_to_image.launch.py
-
-'''
-ros2 launch pointcloud_processing pointcloud_to_image.launch.py \
-  --ros-args \
-  -p pointcloud_topic:=/halo_radar/cropped_pointcloud \
-  -p image_topic:=/halo_radar/radar_image/compressed \
-  -p save_images:=True \
-  -p save_directory:=/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images \
-  -p range:=120.0 \
-  -p use_grayscale:=False \
-  -p circle_radius:=3
-'''
 

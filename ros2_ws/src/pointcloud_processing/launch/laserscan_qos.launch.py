@@ -16,10 +16,3 @@ def generate_launch_description():
     ])
 
 # ros2 launch pointcloud_processing laserscan_qos.launch.py
-
-'''
-ros2 launch pointcloud_processing laserscan_qos.launch.py \
-    --ros-args \
-    -p sub_laserscan_topic:=/halo_radar/cropped_scan \
-    -p pub_laserscan_topic:=/halo_radar/republished_scan
-'''
