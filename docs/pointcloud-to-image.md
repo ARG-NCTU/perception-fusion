@@ -61,10 +61,10 @@ source environment_ros2.sh
 3. Visualize Radar
 
 ```bash
-ros2 launch pointcloud_processing pointcloud_to_image.launch.py
+ros2 launch pointcloud_processing demo.launch.py
 ```
 
-### Terminal 2: Play Radar Ros2 Bag
+### Terminal 2: Play Radar Ros2 Bag (or Run Radar)
 
 1. Docker Run
 
@@ -125,3 +125,25 @@ source environment_ros2.sh
 ```bash
 ros2 run rqt_image_view rqt_image_view
 ```
+
+### Terminal 5: rqt_reconfigure to Reconfigure ROS2 parameters
+
+1. Docker Run
+
+```bash
+source Docker/ros2-cpu/run.sh
+```
+
+2. Source ROS2 Environment
+
+```bash
+source environment_ros2.sh
+```
+
+3. Run rqt_reconfigure
+
+```bash
+ros2 run rqt_reconfigure rqt_reconfigure
+```
+
+Click "Refresh" button, and click "point_to_image", you can reconfigure all paramters you want.
