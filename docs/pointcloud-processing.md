@@ -25,7 +25,7 @@ git submodule update --init --recursive
 Run this script to pull docker image to your workstation.
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros2-cpu/run.sh
 ```
 
 1.2. Docker Join
@@ -33,7 +33,7 @@ source Docker/ros1-ros2/run.sh
 If want to enter same docker image, type below command.
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros2-cpu/run.sh
 ```
 
 2. Building ROS Point Cloud Processing Package
