@@ -10,6 +10,7 @@ Panels:
         - /PointCloud21
         - /TF1
         - /TF1/Frames1
+        - /TF1/Tree1
         - /LaserScan1
       Splitter Ratio: 0.5
     Tree Height: 725
@@ -206,16 +207,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 351.7632141113281
+      Distance: 393.97479248046875
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -1.9490853548049927
-        Y: 3.2248446941375732
-        Z: 0.30629709362983704
+        X: -0.996799111366272
+        Y: -6.639519214630127
+        Z: 13.066593170166016
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -224,7 +225,7 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 6.238582611083984
+      Yaw: 3.135019540786743
     Saved: ~
 Window Geometry:
   Displays:
