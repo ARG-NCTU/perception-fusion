@@ -15,8 +15,8 @@ class SimpleLaserScanPublisher(Node):
         self.declare_parameter('pub_laserscan_topic', '/halo_radar/republished_scan')
 
         # Get parameters
-        self.sub_laserscan_topic = self.get_parameter('sub_laserscan_topic').get_parameter_value().string_value
-        self.pub_laserscan_topic = self.get_parameter('pub_laserscan_topic').get_parameter_value().string_value
+        self.sub_laserscan_topic = self.get_parameter('sub_laserscan_topic').value
+        self.pub_laserscan_topic = self.get_parameter('pub_laserscan_topic').value
 
         # QoS profile for subscription
         self.qos = QoSProfile(
@@ -34,7 +34,7 @@ class SimpleLaserScanPublisher(Node):
         self.laserscan_sub = self.create_subscription(
             LaserScan,
             self.sub_laserscan_topic,
-            self.laserscan_callback,
+            self.laserscan_qos_callback,
             self.qos
         )
         self.laserscan_pub = self.create_publisher(
@@ -46,7 +46,7 @@ class SimpleLaserScanPublisher(Node):
         self.get_logger().info(f"Subscribed to LaserScan topic: {self.sub_laserscan_topic}")
         self.get_logger().info(f"Republishing LaserScan to topic: {self.pub_laserscan_topic}")
 
-    def laserscan_callback(self, msg):
+    def laserscan_qos_callback(self, msg):
         """
         Callback function to simply republish the LaserScan data.
         """
@@ -57,14 +57,12 @@ class SimpleLaserScanPublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = SimpleLaserScanPublisher()
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        node.destroy_node()
-        rclpy.shutdown()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    main(args=sys.argv)
+

@@ -20,21 +20,10 @@ class TransformPointcloud(Node):
         self.declare_parameter('child_frame_id', 'base_link')  # Target child frame
 
         # Get parameters
-        self.sub_radar_topic = self.get_parameter('sub_radar_topic').get_parameter_value().string_value
-        self.pub_radar_topic = self.get_parameter('pub_radar_topic').get_parameter_value().string_value
-        self.parent_frame_id = self.get_parameter('parent_frame_id').get_parameter_value().string_value
-        self.child_frame_id = self.get_parameter('child_frame_id').get_parameter_value().string_value
-
-        # Set QoS Profile (Dynamic)
-        self.qos = QoSProfile(
-            reliability=QoSReliabilityPolicy.BEST_EFFORT,
-            depth=10
-        )
-
-        self.qos_pub = QoSProfile(
-            reliability=QoSReliabilityPolicy.RELIABLE,
-            depth=10
-        )
+        self.sub_radar_topic = self.get_parameter('sub_radar_topic').value
+        self.pub_radar_topic = self.get_parameter('pub_radar_topic').value
+        self.parent_frame_id = self.get_parameter('parent_frame_id').value
+        self.child_frame_id = self.get_parameter('child_frame_id').value
 
         # TF2 Buffer and Listener (used only for PointCloud2)
         self.tf_buffer = Buffer()
@@ -45,9 +34,9 @@ class TransformPointcloud(Node):
             PointCloud2,
             self.sub_radar_topic,
             self.pointcloud_callback,
-            self.qos
+            10
         )
-        self.radar_pub = self.create_publisher(PointCloud2, self.pub_radar_topic, self.qos_pub)
+        self.radar_pub = self.create_publisher(PointCloud2, self.pub_radar_topic, 10)
         self.get_logger().info(f"Subscribed to PointCloud2 topic: {self.sub_radar_topic}, publishing to {self.pub_radar_topic}")
 
     def pointcloud_callback(self, msg):
@@ -57,8 +46,8 @@ class TransformPointcloud(Node):
         try:
             # Log fields in the incoming PointCloud2 message
             field_names = [field.name for field in msg.fields]
-            self.get_logger().info(f"Fields in incoming PointCloud2 message: {field_names}")
-            self.get_logger().info(f"Incoming PointCloud2 frame_id: {msg.header.frame_id}")
+            # self.get_logger().info(f"Fields in incoming PointCloud2 message: {field_names}")
+            # self.get_logger().info(f"Incoming PointCloud2 frame_id: {msg.header.frame_id}")
 
             # Get the latest transform between parent_frame_id and child_frame_id
             transform = self.tf_buffer.lookup_transform(
@@ -68,21 +57,21 @@ class TransformPointcloud(Node):
             )
 
             # Log transform details
-            self.get_logger().info(f"Transform details: {self.parent_frame_id} -> {self.child_frame_id}")
-            self.get_logger().info(f"Translation: {transform.transform.translation}")
-            self.get_logger().info(f"Rotation: {transform.transform.rotation}")
+            # self.get_logger().info(f"Transform details: {self.parent_frame_id} -> {self.child_frame_id}")
+            # self.get_logger().info(f"Translation: {transform.transform.translation}")
+            # self.get_logger().info(f"Rotation: {transform.transform.rotation}")
 
             # Extract translation and rotation from the transform
-            translation = np.array([
-                transform.transform.translation.x,
-                transform.transform.translation.y,
-                transform.transform.translation.z
-            ])
+            # translation = np.array([
+            #     transform.transform.translation.x,
+            #     transform.transform.translation.y,
+            #     transform.transform.translation.z
+            # ])
             rotation_matrix = self.quaternion_to_rotation_matrix(transform.transform.rotation)
 
             # Read points from PointCloud2
             points = list(read_points(msg, field_names=tuple(field_names), skip_nans=True))
-            self.get_logger().info(f"Read {len(points)} points from PointCloud2.")
+            # self.get_logger().info(f"Read {len(points)} points from PointCloud2.")
 
             if len(points) == 0:
                 self.get_logger().error("PointCloud2 message contains no valid points.")
@@ -96,7 +85,7 @@ class TransformPointcloud(Node):
             intensity = points_array[:, 3] if 'intensity' in field_names else None
 
             # Apply transformation: rotate + translate points
-            transformed_xyz = np.dot(xyz, rotation_matrix.T) + translation
+            transformed_xyz = np.dot(xyz, rotation_matrix.T) # + translation
 
             # Combine transformed points with intensity if available
             if intensity is not None:
@@ -112,7 +101,7 @@ class TransformPointcloud(Node):
 
             # Publish the transformed pointcloud
             self.radar_pub.publish(transformed_cloud)
-            self.get_logger().info("Transformed and published PointCloud2 message.")
+            # self.get_logger().info("Transformed and published PointCloud2 message.")
 
         except Exception as e:
             self.get_logger().error(f"Failed to process PointCloud2: {e}")

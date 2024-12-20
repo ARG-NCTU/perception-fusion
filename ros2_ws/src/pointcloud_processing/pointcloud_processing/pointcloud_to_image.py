@@ -77,10 +77,10 @@ class PointCloud2Image(Node):
             intensity_normalized = (intensity - intensity.min()) / (intensity.max() - intensity.min())
             for i, (x, y, z) in enumerate(xyz):
                 # Normalize x and y to image pixels, with the center of the image as 0, 0
-                u = int((x - range_min) / (range_max - range_min) * img_width - img_width / 2)
-                v = int((y - range_min) / (range_max - range_min) * img_height - img_height / 2)
-                u += img_width // 2  # Shift the center to the middle of the image
-                v += img_height // 2
+                u = int((y - range_min) / (range_max - range_min) * img_width - img_width / 2)
+                v = int((x - range_min) / (range_max - range_min) * img_height - img_height / 2)
+                u = img_height // 2 - u
+                v = img_width // 2 - v
                 # self.get_logger().info(f"u: {u}, v: {v}")
                 if 0 <= u < img_width and 0 <= v < img_height:
                     if self.use_grayscale:
@@ -94,10 +94,11 @@ class PointCloud2Image(Node):
                     cv2.circle(intensity_image, (u, v), self.circle_radius, tuple(map(int, color)), -1)
         else:
             for (x, y, z) in xyz:
-                u = int((x - range_min) / (range_max - range_min) * img_width - img_width / 2)
-                v = int((y - range_min) / (range_max - range_min) * img_height - img_height / 2)
-                u += img_width // 2  # Shift the center to the middle of the image
-                v += img_height // 2
+                u = int((y - range_min) / (range_max - range_min) * img_width - img_width / 2)
+                v = int((x - range_min) / (range_max - range_min) * img_height - img_height / 2)
+                u = img_height // 2 - u
+                v = img_width // 2 - v
+                # self.get_logger().info(f"u: {u}, v: {v}")
                 if 0 <= u < img_width and 0 <= v < img_height:
                     cv2.circle(intensity_image, (u, v), self.circle_radius, (255, 255, 255), -1)  # White color for points
 
