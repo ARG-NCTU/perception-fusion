@@ -42,20 +42,6 @@ def generate_launch_description():
             ]
         ),
 
-        # Transform LaserScan Node
-        Node(
-            package='pointcloud_processing',
-            executable='transform_laserscan',
-            name='transform_laserscan',
-            output='screen',
-            parameters=[
-                {'sub_laserscan_topic': '/halo_radar/cropped_scan'},
-                {'pub_laserscan_topic': '/halo_radar/transformed_scan'},
-                {'parent_frame_id': 'map'},
-                {'child_frame_id': 'base_link'}
-            ]
-        ),
-
         # LaserScan qos
         Node(
             package='pointcloud_processing',
@@ -63,8 +49,22 @@ def generate_launch_description():
             name='laserscan_qos',
             output='screen',
             parameters=[
-                {'sub_laserscan_topic', '/halo_radar/cropped_scan'},
-                {'pub_laserscan_topic', '/halo_radar/republished_scan'}
+                {'sub_laserscan_topic': '/halo_radar/cropped_scan'},
+                {'pub_laserscan_topic': '/halo_radar/republished_scan'}
+            ]
+        ),
+
+        # Transform LaserScan Node
+        Node(
+            package='pointcloud_processing',
+            executable='transform_laserscan',
+            name='transform_laserscan',
+            output='screen',
+            parameters=[
+                {'sub_laserscan_topic': '/halo_radar/republished_scan'},
+                {'pub_laserscan_topic': '/halo_radar/transformed_scan'},
+                {'parent_frame_id': 'map'},
+                {'child_frame_id': 'base_link'}
             ]
         ),
 
