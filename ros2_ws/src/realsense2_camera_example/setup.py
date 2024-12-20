@@ -1,4 +1,6 @@
-from setuptools import setup
+import os
+from glob import glob
+from setuptools import find_packages, setup
 
 package_name = 'realsense2_camera_example'
 
@@ -9,11 +11,10 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/side_camera.launch.py']),
-        ('share/' + package_name + '/yaml', [
-            'yaml/rs_launch_1.yaml',
-            'yaml/rs_launch_3.yaml',
-        ]),
+        (os.path.join('share', package_name, 'launch'),
+         glob(os.path.join('launch', '*.launch.py'))),
+        (os.path.join('share', package_name, 'config'),
+         glob(os.path.join('launch', '*.yaml'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
