@@ -1,5 +1,5 @@
 [submodule "ros2_ros1_bridge_ws/src/ros1_bridge"]
-	path = ros2_ws/src/ros1_bridge
+	path = ros2_ros1_bridge_ws/src/ros1_bridge
 	url = git@github.com:ARG-NCTU/ros1_bridge.git
 [submodule "ros1_ws/src/nuscenes_visualize"]
 	path = ros1_ws/src/nuscenes_visualize

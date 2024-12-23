@@ -108,6 +108,12 @@ RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu foca
     && rosdep init && rosdep update && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+######################################## pip ########################################
+RUN python3 -m pip install --upgrade \
+    importlib_metadata \
+    'setuptools<70.0' \
+    pytest
+
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
