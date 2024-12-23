@@ -47,7 +47,7 @@ def generate_launch_description():
     # Argument for YAML configuration file
     declare_config_file = DeclareLaunchArgument(
         "config_file",
-        default_value="yaml/rs_launch_1.yaml",
+        default_value="config/rs_launch_1.yaml",
         description="Path to the YAML configuration file relative to the realsense2_camera_example package",
     )
 

@@ -91,7 +91,7 @@ source environment_ros2.sh
 6. Run Realsense Node
 
 ```bash
-ros2 launch realsense2_camera_example side_camera.launch.py config_file:=yaml/rs_launch_3.yaml
+ros2 launch realsense2_camera_example side_camera.launch.py config_file:=config/rs_launch_3.yaml
 ```
 
 ### Visualize Camera Topics
