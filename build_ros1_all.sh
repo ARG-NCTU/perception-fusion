@@ -3,7 +3,7 @@
 export ROS1_INSTALL_PATH=/opt/ros/noetic
 
 cd ros1_ws
-catkin build --symlink-install
+catkin build
 cd ..
 
 source ${ROS1_INSTALL_PATH}/setup.bash

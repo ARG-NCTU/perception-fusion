@@ -36,16 +36,16 @@ If want to enter same docker image, type below command.
 source Docker/ros1-ros2/run.sh
 ```
 
-2. Building ROS2 ROS1 bridge
-
-```bash
-source build_ros2_ros1_bridge.sh
-```
-
-3. Building All ROS1 package
+2. Building All ROS1 package
 
 ```bash
 source build_ros1_all.sh
+```
+
+3. Building ROS2 ROS1 bridge
+
+```bash
+source build_ros2_ros1_bridge.sh
 ```
 
 ## Usage
