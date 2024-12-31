@@ -3,7 +3,7 @@
 # Set the base directory for bag files
 BAGS_DIR="$HOME/perception-fusion/bags"
 TIMESTAMP=$(date +%Y_%m%d_%H%M)
-BAG_PATH="${BAGS_DIR}/radar-lidar-camera-${TIMESTAMP}"
+BAG_PATH="${BAGS_DIR}/radar-camera-${TIMESTAMP}"
 
 # Create the directory if it doesn't exist
 mkdir -p "$BAGS_DIR"
