@@ -1,0 +1,1 @@
+export CYCLONEDDS_URI=file://$HOME/perception-fusion/cyclonedds.xml

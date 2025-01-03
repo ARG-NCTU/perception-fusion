@@ -79,7 +79,7 @@ rs-enumerate-devices -s
 3. Edit Serial Number in yaml file
 
 ```bash
-~/perception-fusion/ros2_ws/src/realsense2_camera_example/yaml/rs_launch_3.yaml
+~/perception-fusion/ros2_ws/src/realsense2_camera_example/config/rs_launch_3.yaml
 ```
 
 4. Building Realsense ROS2 package
