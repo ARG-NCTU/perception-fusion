@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/l4t-pytorch:r35.2.1-pth2.0-py3
+FROM dustynv/ros:humble-desktop-l4t-r35.3.1
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV LANG C.UTF-8
@@ -23,42 +23,39 @@ RUN adduser --disabled-password \
 RUN echo "root:root" | chpasswd
 RUN echo "${USER}:111111" | chpasswd
 
-
-##################################### System Dependencies ######################################
-
-RUN apt-get update -qq && \
-    apt-get install -y \
+###################################### basic #####################################
+RUN apt-get update && \
+    apt-get install -q -y --no-install-recommends \
     git \
+    zip \
+    pip \
     vim \
-    libgtk2.0-dev \
-    python3.8 \
-    python3.8-distutils \
-    python3-pip && \
-    ln -sf /usr/bin/python3.8 /usr/bin/python && \
-    ln -sf /usr/bin/python3.8 /usr/bin/python3 && \
-    rm -rf /var/lib/apt/lists/*
-
-###################################### ROS2 ####################################
-
-RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null && \
-    apt-get update && apt-get install -y --no-install-recommends \
-    ros-${ROS_DISTRO}-desktop \
+    curl \
+    wget \
+    sudo \
+    cmake \
+    net-tools \
+    lsb-release \
+    build-essential \
     python3-colcon-common-extensions \
-    python3-rosdep \
-    ros-dev-tools && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    python3-pip \
+    python3-vcstool \
+    && rm -rf /var/lib/apt/lists/*
 
-##################################### Python Dependencies ######################################
+#################################### realsense manual installation ####################################
 
-# RUN python3.8 -m pip install --no-cache-dir \
+# Manual Installation of librealsense SDK
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE && \
+    apt-get update && \
+    sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u && \
+    sudo apt-get install -y librealsense2-utils librealsense2-dev
 
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
 RUN echo "${USER} ALL=(ALL)  ALL" >> /etc/sudoers
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /etc/bash.bashrc
+RUN echo "source /opt/ros/${ROS_DISTRO}/install/setup.bash" >> /etc/bash.bashrc
 RUN echo "arg ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER ${USER}
