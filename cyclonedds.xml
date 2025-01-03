@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CycloneDDS xmlns="https://cdds.io/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
-    <Domain id="any">
-        <General>
-            <Interfaces>
-                <NetworkInterface name="wg1"/>
-            </Interfaces>
-        </General>
-        <Discovery>
-            <Peers>
-            <Peer address="192.168.0.33"/>
-            <Peer address="192.168.0.23"/>
-            </Peers>
-            <ParticipantIndex>auto</ParticipantIndex>
-        </Discovery>
-    </Domain>
+<CycloneDDS>
+  <Domain>
+    <General>
+      <AllowMulticast>false</AllowMulticast>
+      <NetworkInterface>192.168.0.23</NetworkInterface> <!-- Jetson Orin -->
+      <NetworkInterface>192.168.0.33</NetworkInterface> <!-- Desktop -->
+    </General>
+  </Domain>
 </CycloneDDS>

@@ -4,3 +4,15 @@
 [submodule "ros1_ws/src/nuscenes_visualize"]
 	path = ros1_ws/src/nuscenes_visualize
 	url = git@github.com:ARG-NCTU/nuscenes_visualize.git
+[submodule "ros2_ws/src/realsense-ros"]
+	path = ros2_ws/src/realsense-ros
+	url = git@github.com:ARG-NCTU/realsense-ros.git
+	branch = ros2-master
+[submodule "ros2_ws/src/diagnostics"]
+	path = ros2_ws/src/diagnostics
+	url = https://github.com/ros/diagnostics.git
+	branch = ros2
+[submodule "ros2_ws/src/image_transport_plugins"]
+	path = ros2_ws/src/image_transport_plugins
+	url = https://github.com/ros-perception/image_transport_plugins.git
+	branch = humble
