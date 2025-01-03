@@ -95,10 +95,16 @@ RUN sudo -H pip install --upgrade twisted \
 
 ######################################## realsense ########################################
 
-RUN apt-get update && apt-get install -y \
-    libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
-    libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
-    && rm -rf /var/lib/apt/lists/*
+# Clone and build librealsense
+ENV LIBREALSENSE_VERSION 2.50.0
+WORKDIR /tmp
+RUN git clone https://github.com/IntelRealSense/librealsense.git \
+    && cd librealsense \
+    && git checkout v${LIBREALSENSE_VERSION} \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make install
 
 ##################################### PIP ######################################
 

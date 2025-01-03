@@ -16,6 +16,12 @@ git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
+## Enter the repo
+
+```bash
+cd ros-humble-ros1-bridge-builder
+```
+
 ## Usage
 
 ### Usage 1: Single D435 camera
@@ -53,7 +59,7 @@ source environment_ros2.sh
 6. Run Realsense Node
 
 ```bash
-ros2 launch realsense2_camera_example side_camera.launch.py config_file:=yaml/rs_launch_1.yaml
+ros2 launch realsense2_camera_example side_camera.launch.py config_file:=config/rs_launch_1.yaml
 ```
 
 ### Usage 2: Triple D435 camera

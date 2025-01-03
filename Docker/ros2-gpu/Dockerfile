@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM nvidia/cuda:12.0.0-cudnn8-devel-ubuntu22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV LANG C.UTF-8
@@ -121,18 +121,15 @@ RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
 
 RUN sudo -H pip install transforms3d
 
-########################################## velodyne ####################################
-
-RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
-    ros-${ROS_DISTRO}-velodyne* \
-    && rm -rf /var/lib/apt/lists/*
-
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
 RUN echo "${USER} ALL=(ALL)  ALL" >> /etc/sudoers
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /etc/bash.bashrc
 RUN echo "arg ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=all
 
 USER ${USER}
 WORKDIR ${HOME}

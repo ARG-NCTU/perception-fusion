@@ -16,6 +16,12 @@ git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
+## Enter the repo
+
+```bash
+cd ros-humble-ros1-bridge-builder
+```
+
 ## Set up Environment
 
 1. Enter Docker Enviroment
