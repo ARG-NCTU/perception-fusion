@@ -46,6 +46,12 @@ rs-enumerate-devices -s
 
 4. Building Realsense ROS2 package
 
+First Time Build:
+```bash
+source build_ros2_camera_jetson_orin.sh
+```
+
+Second Time or Later Build:
 ```bash
 source build_ros2_camera.sh
 ```
@@ -84,6 +90,12 @@ rs-enumerate-devices -s
 
 4. Building Realsense ROS2 package
 
+First Time Build:
+```bash
+source build_ros2_camera_jetson_orin.sh
+```
+
+Second Time or Later Build:
 ```bash
 source build_ros2_camera.sh
 ```
