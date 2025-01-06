@@ -11,15 +11,3 @@ docs/ros2-ros1-bridge-example.md
 ```bash
 docs/realsense2-camera-ros2.md
 ```
-
-## Visualize Nuscene Dataset Guide
-
-```bash
-docs/visualize_nuscene.md
-```
-
-## PointCloud to Image Guide
-
-```bash
-pointcloud-to-image.md
-```
