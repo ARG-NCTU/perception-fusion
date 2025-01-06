@@ -53,8 +53,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-###################################### ROS1-ROS2-Bridge ################################
-# RUN apt-get update && apt-get install -y --no-install-recommends \
+##################################### ROS1-ROS2-Bridge ################################
+
+# RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
+#     curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
+#     sh -c 'echo "deb [arch=arm64] http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list' && \
+#     apt-get update && apt-get install -y --no-install-recommends \
 #     ros-${ROS1_DISTRO}-catkin \
 #     ros-${ROS1_DISTRO}-roscpp \
 #     ros-${ROS1_DISTRO}-roslaunch \
@@ -65,19 +69,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #     ros-${ROS1_DISTRO}-roscpp-tutorials \
 #     ros-${ROS1_DISTRO}-rospy-tutorials \
 #     ros-${ROS1_DISTRO}-rostopic \
-#     ros-${ROS1_DISTRO}-rqt-image-view \
-#     && apt-get clean && rm -rf /var/lib/apt/lists/*
+#     ros-${ROS1_DISTRO}-rqt-image-view && \
+#     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-###################################### ROS 2 Rolling #####################################
+###################################### ROS 2 Humble #####################################
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    software-properties-common \
-    && add-apt-repository universe && apt-get update \
-    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - \
-    && sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list' \
-    && apt-get update && apt-get install -y ros-rolling-desktop \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
+#     curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - && \
+#     sh -c 'echo "deb [arch=arm64] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list' && \
+#     apt-get update && apt-get install -y --no-install-recommends \
+#     ros-${ROS2_DISTRO}-desktop \
+#     python3-${ROS2_DISTRO}-common-extensions \
+#     python3-rosdep && \
+#     rosdep init && rosdep update && \
+#     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ######################################## pip ########################################
 RUN python3 -m pip install --upgrade \

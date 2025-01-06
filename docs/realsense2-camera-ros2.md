@@ -19,7 +19,7 @@ git submodule update --init --recursive
 ## Enter the repo
 
 ```bash
-cd ros-humble-ros1-bridge-builder
+cd perception-fusion
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ cd ros-humble-ros1-bridge-builder
 1. Docker Run
 
 ```bash
-source Docker/ros2-cpu/run.sh
+source Docker/ros2-jetson-orin/run.sh
 ```
 
 2. Search Serial Number
@@ -67,7 +67,7 @@ ros2 launch realsense2_camera_example side_camera.launch.py config_file:=config/
 1. Docker Run
 
 ```bash
-source Docker/ros2-cpu/run.sh
+source Docker/ros2-jetson-orin/run.sh
 ```
 
 2. Search Serial Number
@@ -105,7 +105,7 @@ ros2 launch realsense2_camera_example side_camera.launch.py config_file:=config/
 1. Docker Join
 
 ```bash
-source Docker/ros2-cpu/run.sh
+source Docker/ros2-jetson-orin/run.sh
 ```
 
 2. Source ROS2 Environment
@@ -133,7 +133,7 @@ ros2 run rqt_image_view rqt_image_view
 1. Docker Join
 
 ```bash
-source Docker/ros2-cpu/run.sh
+source Docker/ros2-jetson-orin/run.sh
 ```
 
 2. Source ROS2 Environment
@@ -153,7 +153,7 @@ source ros2bag/record_images.sh
 1. Docker Join
 
 ```bash
-source Docker/ros2-cpu/run.sh
+source Docker/ros2-jetson-orin/run.sh
 ```
 
 2. Source ROS2 Environment

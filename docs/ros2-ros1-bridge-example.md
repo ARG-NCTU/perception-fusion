@@ -19,7 +19,7 @@ git submodule update --init --recursive
 ## Enter the repo
 
 ```bash
-cd ros-humble-ros1-bridge-builder
+cd perception-fusion
 ```
 
 ## Set up Environment
