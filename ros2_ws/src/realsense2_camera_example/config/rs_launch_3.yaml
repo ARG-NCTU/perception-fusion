@@ -1,7 +1,7 @@
 camera1:
   camera_name: camera1
   camera_namespace: camera
-  serial_no: "040322070602"
+  serial_no: "746612070222"
   enable_color: true
   enable_depth: false
   enable_infra: false
@@ -18,7 +18,7 @@ camera1:
 camera2:
   camera_name: camera2
   camera_namespace: camera
-  serial_no: "935322070841"
+  serial_no: "944122074382"
   enable_color: true
   enable_depth: false
   enable_infra: false
@@ -35,7 +35,7 @@ camera2:
 camera3:
   camera_name: camera3
   camera_namespace: camera
-  serial_no: "937622072048"
+  serial_no: "944122071004"
   enable_color: true
   enable_depth: false
   enable_infra: false
