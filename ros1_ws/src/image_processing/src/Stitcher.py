@@ -261,11 +261,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     main(args)
 
-# First run
-# python3 stitching.py --left ~/boats_dataset_processing/bags_processing/d435_images/2024-11-01-15-23-17_left --mid ~/boats_dataset_processing/bags_processing/d435_images/2024-11-01-15-23-17_mid --right ~/boats_dataset_processing/bags_processing/d435_images/2024-11-01-15-23-17_right --output_dir stitched_images/2024-11-01-15-23-17
-
-# Second run with precomputed H1 and H2
-# python3 stitching.py --left ~/boats_dataset_processing/bags_processing/d435_images/2024-11-01-15-23-17_left --mid ~/boats_dataset_processing/bags_processing/d435_images/2024-11-01-15-23-17_mid --right ~/boats_dataset_processing/bags_processing/d435_images/2024-11-01-15-23-17_right --output_dir stitched_images/2024-11-01-15-23-17 --h1_path stitched_images/2024-11-01-15-23-17/homography/H1_34.npy --h2_path stitched_images/2024-11-01-15-23-17/homography/H2_34.npy
-
 
 

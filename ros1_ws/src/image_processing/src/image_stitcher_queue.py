@@ -21,7 +21,7 @@ class ROSImageStitcher:
         self.left_topic = rospy.get_param('~sub_camera_topic_left', '/camera_left/color/image_raw/compressed')
         self.mid_topic = rospy.get_param('~sub_camera_topic_mid', '/camera_middle/color/image_raw/compressed')
         self.right_topic = rospy.get_param('~sub_camera_topic_right', '/camera_right/color/image_raw/compressed')
-        self.output_topic = rospy.get_param('~pub_camera_topic', '/camera_real_stitched/color/image_raw/compressed')
+        self.output_topic = rospy.get_param('~pub_camera_topic', '/camera_stitched/color/image_raw/compressed')
         self.output_dir = rospy.get_param('~output_dir', 'stitched_results')
         self.h1_path = rospy.get_param('~h1_path', None)
         self.h2_path = rospy.get_param('~h2_path', None)
@@ -149,8 +149,7 @@ class ROSImageStitcher:
             return None
 
         # Save the stitched image
-        # if not self.h1_path and not self.h2_path:
-        if True:
+        if not self.h1_path and not self.h2_path:
             images_dir = os.path.join(output_dir, 'stitched_images')
             os.makedirs(images_dir, exist_ok=True)
             cv2.imwrite(os.path.join(images_dir, f"{self.image_index}.png"), final_image)
@@ -174,7 +173,7 @@ class ROSImageStitcher:
         while not rospy.is_shutdown():
             self.process_images()
             rate.sleep()
-        create_video_from_images(os.path.join(rospack.get_path('image_processing'), self.output_dir, 'stitched_videos'), 'stitched_video.mp4')
+        # create_video_from_images(os.path.join(rospack.get_path('image_processing'), self.output_dir, 'stitched_videos'), 'stitched_video.mp4')
 
 
 if __name__ == '__main__':

@@ -106,39 +106,40 @@ RUN git clone https://github.com/IntelRealSense/librealsense.git \
     && cmake .. \
     && make install
 
-##################################### PIP ######################################
+RUN pip3 install --ignore-installed opencv-python-headless
+# ##################################### PIP ######################################
 
-RUN mkdir -p /home/${USER}/.cache/pip && chown -R ${USER}:${USER} /home/${USER}/.cache/pip
-# RUN pip3 install --upgrade pip setuptools
+# RUN mkdir -p /home/${USER}/.cache/pip && chown -R ${USER}:${USER} /home/${USER}/.cache/pip
+# # RUN pip3 install --upgrade pip setuptools
 
-##################################### CRF-NET ######################################
+# ##################################### CRF-NET ######################################
 
-RUN pip3 install --upgrade setuptools==65.5.1 importlib-metadata==4.13.0
-RUN pip3 install --progress-bar=on --verbose \
-    opencv-python \
-    Cython \
-    numpy>=1.16.0 \
-    tensorflow-gpu==2.10.1 \
-    tensorflow-serving-api==2.10.1 \
-    opencv-python==3.* \
-    keras==2.10.0 \
-    pyquaternion \ 
-    h5py==3.7.0 \
-    Pillow \ 
-    progressbar2 \ 
-    bayesian-optimization \ 
-    pandas \
-    pyarrow \
-    hilbertcurve \
-    matplotlib \
-    nuscenes-devkit \
-    pydot \
-    keras_resnet
+# RUN pip3 install --upgrade setuptools==65.5.1 importlib-metadata==4.13.0
+# RUN pip3 install --progress-bar=on --verbose \
+#     opencv-python \
+#     Cython \
+#     numpy>=1.16.0 \
+#     tensorflow-gpu==2.10.1 \
+#     tensorflow-serving-api==2.10.1 \
+#     opencv-python==3.* \
+#     keras==2.10.0 \
+#     pyquaternion \ 
+#     h5py==3.7.0 \
+#     Pillow \ 
+#     progressbar2 \ 
+#     bayesian-optimization \ 
+#     pandas \
+#     pyarrow \
+#     hilbertcurve \
+#     matplotlib \
+#     nuscenes-devkit \
+#     pydot \
+#     keras_resnet
 
-##################################### WaterScenes ######################################
+# ##################################### WaterScenes ######################################
 
-RUN pip3 install --progress-bar=on --verbose \
-    WaterScenes==1.0.8
+# RUN pip3 install --progress-bar=on --verbose \
+#     WaterScenes==1.0.8
 
 ##################################### Bag Tools ######################################
 

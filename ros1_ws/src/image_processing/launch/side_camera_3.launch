@@ -1,7 +1,7 @@
 <launch>
   <!-- connect left camera -->
   <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
-    <arg name="serial_no"           value="040322070602"/>
+    <arg name="serial_no"           value="746612070222"/>
     <arg name="camera"              value="camera_left"/>
     <arg name="enable_fisheye"      value="false"/>
     <arg name="enable_infra1"       value="false"/>
@@ -16,7 +16,7 @@
   </include>
   <!-- connect mid camera -->
   <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
-    <arg name="serial_no"           value="937622072048"/>
+    <arg name="serial_no"           value="944122074382"/>
     <arg name="camera"              value="camera_middle"/>
     <arg name="enable_fisheye"      value="false"/>
     <arg name="enable_infra1"       value="false"/>
@@ -31,7 +31,7 @@
   </include>
   <!-- connect right camera -->
   <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
-    <arg name="serial_no"           value="935322070841"/>
+    <arg name="serial_no"           value="944122071004"/>
     <arg name="camera"              value="camera_right"/>
     <arg name="enable_fisheye"      value="false"/>
     <arg name="enable_infra1"       value="false"/>
@@ -45,7 +45,7 @@
     <arg name="color_fps"           value="15"/>
   </include>
   
-  <node name="dynparam_node1" pkg="dynamic_reconfigure" type="dynparam" args="set_from_parameters camera_left/aligned_depth_to_color/image_raw/compressedDepth">
+  <!-- <node name="dynparam_node1" pkg="dynamic_reconfigure" type="dynparam" args="set_from_parameters camera_left/aligned_depth_to_color/image_raw/compressedDepth">
     <param name="png_level" type="int" value="1"/>
   </node>
   <node name="dynparam_node2" pkg="dynamic_reconfigure" type="dynparam" args="set_from_parameters camera_middle/aligned_depth_to_color/image_raw/compressedDepth">
@@ -53,5 +53,5 @@
   </node>
   <node name="dynparam_node3" pkg="dynamic_reconfigure" type="dynparam" args="set_from_parameters camera_right/aligned_depth_to_color/image_raw/compressedDepth">
     <param name="png_level" type="int" value="1"/>
-  </node>
+  </node> -->
 </launch>

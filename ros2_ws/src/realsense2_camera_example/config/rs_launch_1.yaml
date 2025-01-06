@@ -1,7 +1,7 @@
 camera1:
   camera_name: camera1
   camera_namespace: camera
-  serial_no: "040322070602"
+  serial_no: "944122074382"
   enable_color: true
   enable_depth: false
   enable_infra: false

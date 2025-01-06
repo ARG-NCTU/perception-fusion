@@ -13,8 +13,6 @@ echo "BAGS: "$BAGS
 
 rosbag record -O $BAGS \
     /camera_left/color/image_raw/compressed \
-    /detection_result_img/camera_left/compressed \
     /camera_middle/color/image_raw/compressed \
-    /detection_result_img/camera_middle/compressed \
     /camera_right/color/image_raw/compressed \
-    /detection_result_img/camera_right/compressed 
+    /camera_stitched/color/image_raw/compressed
