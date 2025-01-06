@@ -5,7 +5,7 @@ Realsesnse2-Camera-ROS2 Guide
 ## Clone repo 
 
 ```
-git clone --recursive git@github.com:ARG-NCTU/perception-fusion.git
+git clone -b jetson-orin --recursive git@github.com:ARG-NCTU/perception-fusion.git
 ``` 
 
 ## Update repo and submodules
