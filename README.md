@@ -6,6 +6,12 @@
 docs/ros2-ros1-bridge-example.md
 ```
 
+## Realsesnse2-Camera-ROS1 Guide
+
+```bash
+docs/realsense2-camera-ros1.md
+```
+
 ## Realsesnse2-Camera-ROS2 Guide
 
 ```bash

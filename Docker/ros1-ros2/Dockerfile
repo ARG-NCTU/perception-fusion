@@ -114,6 +114,12 @@ RUN python3 -m pip install --upgrade \
     'setuptools<70.0' \
     pytest
 
+##################################### cyclonedds ######################################
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-${ROS2_DISTRO}-rmw-cyclonedds-cpp && \
+    rm -rf /var/lib/apt/lists/*
+
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/

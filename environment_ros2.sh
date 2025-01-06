@@ -1,5 +1,9 @@
 #! /bin/bash
 
+# cp cyclonedds.xml $HOME/cyclonedds.xml
+# cp setup_unicast.sh $HOME/setup_unicast.sh
+# source $HOME/setup_unicast.sh
+
 #################### ROS2 ####################
 
 # If /opt/ros/humble/install exists, source it, otherwise source /opt/ros/humble/setup.bash
