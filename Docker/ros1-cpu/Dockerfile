@@ -1,4 +1,3 @@
-
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -19,7 +18,7 @@ ENV HOME=/home/${USER}
 RUN adduser --disabled-password \
     --gecos "Default user" \
     --uid ${UID} \
-    ${USER} 
+    ${USER}
 
 RUN echo "root:root" | chpasswd
 RUN echo "${USER}:111111" | chpasswd
@@ -27,7 +26,7 @@ RUN echo "${USER}:111111" | chpasswd
 ###################################### basic tools #####################################
 
 RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
-    && apt-get -o Acquire::ForceIPv4=true install -yq --no-install-recommends \ 
+    && apt-get -o Acquire::ForceIPv4=true install -yq --no-install-recommends \
     locales \
     cmake \
     unzip \
@@ -51,8 +50,8 @@ RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
     python3-opencv \
     python3-numpy \
     python3-empy  \
-    python3-dev \ 
-    python3-tk \ 
+    python3-dev \
+    python3-tk \
     apt-transport-https \
     apt-utils \
     graphviz \
@@ -93,18 +92,14 @@ RUN sudo -H pip install --upgrade twisted \
     pyOpenSSL
 
 
-######################################## realsense ########################################
+######################################## librealsense ########################################
 
-# Clone and build librealsense
-ENV LIBREALSENSE_VERSION 2.50.0
-WORKDIR /tmp
-RUN git clone https://github.com/IntelRealSense/librealsense.git \
-    && cd librealsense \
-    && git checkout v${LIBREALSENSE_VERSION} \
-    && mkdir build \
-    && cd build \
-    && cmake .. \
-    && make install
+RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=true install --no-install-recommends -y \
+    ros-$ROS_DISTRO-librealsense2* \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+######################################## OPENCV ########################################
 
 RUN pip3 install --ignore-installed opencv-python-headless
 # ##################################### PIP ######################################
@@ -123,11 +118,11 @@ RUN pip3 install --ignore-installed opencv-python-headless
 #     tensorflow-serving-api==2.10.1 \
 #     opencv-python==3.* \
 #     keras==2.10.0 \
-#     pyquaternion \ 
+#     pyquaternion \
 #     h5py==3.7.0 \
-#     Pillow \ 
-#     progressbar2 \ 
-#     bayesian-optimization \ 
+#     Pillow \
+#     progressbar2 \
+#     bayesian-optimization \
 #     pandas \
 #     pyarrow \
 #     hilbertcurve \
@@ -145,7 +140,7 @@ RUN pip3 install --ignore-installed opencv-python-headless
 
 RUN python3 -m pip install --upgrade \
     gpxpy \
-    tqdm 
+    tqdm
 
 ##################################### setting ###################################################
 
@@ -156,4 +151,3 @@ RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /etc/bash.bashrc
 USER ${USER}
 WORKDIR ${HOME}
 CMD ["/bin/bash"]
-    
