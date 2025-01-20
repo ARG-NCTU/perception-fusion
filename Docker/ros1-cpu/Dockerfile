@@ -99,6 +99,12 @@ RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=t
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get install --no-install-recommends -y \
+    librealsense2-dkms \
+    librealsense2-utils \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 ######################################## OPENCV ########################################
 
 RUN pip3 install --ignore-installed opencv-python-headless
