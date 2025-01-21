@@ -5,6 +5,7 @@ import rospkg
 import rosbag
 import csv
 import os
+from tqdm import tqdm
 
 rospack = rospkg.RosPack()
 
