@@ -42,6 +42,12 @@ If want to enter same docker image, type below command.
 source Docker/ros1-cpu/join.sh
 ```
 
+2. Build Catkin Workspace
+
+```bash
+source build_ros1_all.sh
+```
+
 ## Usage
 
 ### Terminal 1: ROSCORE

@@ -1,30 +1,42 @@
 # Perception Fusion
 
-## ROS2-ROS1-Bridge Guide
+## ROS1 & ROS2
+
+### ROS2-ROS1-Bridge Guide
 
 ```bash
 docs/ros2-ros1-bridge-example.md
 ```
 
-## Realsesnse2-Camera-ROS1 Guide
+## ROS1
+
+### Realsesnse2-Camera-ROS1 Guide
 
 ```bash
 docs/realsense2-camera-ros1.md
 ```
 
-## Realsesnse2-Camera-ROS2 Guide
-
-```bash
-docs/realsense2-camera-ros2.md
-```
-
-## Visualize Nuscene Dataset Guide
+### Visualize Nuscene Dataset Guide
 
 ```bash
 docs/visualize_nuscene.md
 ```
 
-## PointCloud to Image Guide
+### Plot Mavros Trajectory
+
+```bash
+plot-mavros-trajectory.md
+```
+
+## ROS2
+
+### Realsesnse2-Camera-ROS2 Guide
+
+```bash
+docs/realsense2-camera-ros2.md
+```
+
+### PointCloud to Image Guide
 
 ```bash
 pointcloud-to-image.md
