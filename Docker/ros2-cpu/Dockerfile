@@ -133,6 +133,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #     ros-${ROS_DISTRO}-velodyne* \
 #     && rm -rf /var/lib/apt/lists/*
 
+# ###################################### APRILTAG ROS2 ######################################
+
+# RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+#     ros-${ROS_DISTRO}-vision-opencv \
+#     ros-${ROS_DISTRO}-image-transport \
+#     ros-${ROS_DISTRO}-apriltag \
+#     ros-${ROS_DISTRO}-apriltag-ros \
+#     && rm -rf /var/lib/apt/lists/*
+
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
