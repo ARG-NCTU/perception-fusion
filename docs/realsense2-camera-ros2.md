@@ -173,3 +173,21 @@ cd bags/images-2024_1213_1533
 ```bash
 ros2 bag play images-2024_1213_1533_0.db3 
 ```
+
+### Record Camera Intrinsics Example
+
+Refer "Usage 1: Single D435 camera" or "Usage 2: Triple D435 camera" step 1-5
+
+6. Run Camera Info Saver Node
+
+For Single camera:
+
+```bash
+ros2 launch realsense2_camera_example camera_info_saver.launch.py save_dir:=/home/arg/perception-fusion/data/camera_info config_file:=config/rs_launch_1.yaml
+```
+
+For Triple camera:
+
+```bash
+ros2 launch realsense2_camera_example camera_info_saver.launch.py save_dir:=/home/arg/perception-fusion/data/camera_info config_file:=config/rs_launch_3.yaml
+```

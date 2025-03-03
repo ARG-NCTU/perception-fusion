@@ -24,6 +24,8 @@ setup(
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [],
+        'console_scripts': [
+            "camera_info_saver = realsense2_camera_example.camera_info_saver:main"
+        ],
     },
 )
