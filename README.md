@@ -36,7 +36,13 @@ plot-mavros-trajectory.md
 docs/realsense2-camera-ros2.md
 ```
 
-### PointCloud to Image Guide
+### Velodyne-Lidar-ROS2 Guide
+
+```bash
+docs/velodyne-lidar-ros2.md
+```
+
+### Radar PointCloud to Image Guide
 
 ```bash
 pointcloud-to-image.md
