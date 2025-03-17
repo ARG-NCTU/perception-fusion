@@ -2,7 +2,7 @@
   <!-- connect left camera -->
   <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
     <arg name="serial_no"           value="746612070222"/>
-    <arg name="camera"              value="camera_left"/>
+    <arg name="camera"              value="camera1"/>
     <arg name="enable_fisheye"      value="false"/>
     <arg name="enable_infra1"       value="false"/>
     <arg name="enable_infra2"       value="false"/>
@@ -17,7 +17,7 @@
   <!-- connect mid camera -->
   <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
     <arg name="serial_no"           value="944122074382"/>
-    <arg name="camera"              value="camera_middle"/>
+    <arg name="camera"              value="camera2"/>
     <arg name="enable_fisheye"      value="false"/>
     <arg name="enable_infra1"       value="false"/>
     <arg name="enable_infra2"       value="false"/>
@@ -32,7 +32,7 @@
   <!-- connect right camera -->
   <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
     <arg name="serial_no"           value="944122071004"/>
-    <arg name="camera"              value="camera_right"/>
+    <arg name="camera"              value="camera3"/>
     <arg name="enable_fisheye"      value="false"/>
     <arg name="enable_infra1"       value="false"/>
     <arg name="enable_infra2"       value="false"/>

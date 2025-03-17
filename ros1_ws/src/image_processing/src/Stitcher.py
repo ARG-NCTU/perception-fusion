@@ -135,7 +135,11 @@ class Stitcher():
             dst_pts = np.float32(dst_pts)
 
             print('Estimating Homography...')
-            H, mask = cv2.findHomography(dst_pts, src_pts, cv2.RANSAC, 5.0)
+            try:
+                H, mask = cv2.findHomography(dst_pts, src_pts, cv2.RANSAC, 5.0)
+            except Exception as e:
+                return None
+                
 
             # Save the homography matrix if a path is provided and it was newly computed
             if save_H_path is not None and H is not None:
@@ -246,18 +250,18 @@ def main(args):
         cv2.imwrite(final_path, final_image)
     
     # Create video from stitched images
-    video_path = os.path.join(args.output_dir, 'video', 'stitched_result.mp4')
-    os.makedirs(os.path.dirname(video_path), exist_ok=True)
-    create_video_from_images(output_images_dir, video_path, fps=30)
+    # video_path = os.path.join(args.output_dir, 'video', 'stitched_result.mp4')
+    # os.makedirs(os.path.dirname(video_path), exist_ok=True)
+    # create_video_from_images(output_images_dir, video_path, fps=30)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Stitch images from left, mid, and right folders.")
-    parser.add_argument('--left', type=str, default="d435-raw/d435_images/2024-11-01-15-23-17_left", help="Directory for left images")
-    parser.add_argument('--mid', type=str, default="d435-raw/d435_images/2024-11-01-15-23-17_mid", help="Directory for mid images")
-    parser.add_argument('--right', type=str, default="d435-raw/d435_images/2024-11-01-15-23-17_right", help="Directory for right images")
+    parser.add_argument('--left', type=str, default="/home/tzuchichen/boats_dataset_processing/bags_processing/0226_ks_images/2025-02-26-13-58-01_1_left", help="Directory for left images")
+    parser.add_argument('--mid', type=str, default="/home/tzuchichen/boats_dataset_processing/bags_processing/0226_ks_images/2025-02-26-13-58-01_1_mid", help="Directory for mid images")  #2025-02-26-13-48-46_0_mid
+    parser.add_argument('--right', type=str, default="/home/tzuchichen/boats_dataset_processing/bags_processing/0226_ks_images/2025-02-26-13-58-01_1_right", help="Directory for right images")
     parser.add_argument('--output_dir', type=str, default="stitched_images", help="Output directory for images, video, and homographies")
-    parser.add_argument('--h1_path', type=str, default=None, help="Path to save H1 homography matrix")
-    parser.add_argument('--h2_path', type=str, default=None, help="Path to save H2 homography matrix")
+    parser.add_argument('--h1_path', type=str, default=None, help="Path to save H1 homography matrix") #"/home/tzuchichen/perception-fusion/ros1_ws/src/image_processing/stitched_results/homography/H1_1.npy"
+    parser.add_argument('--h2_path', type=str, default=None, help="Path to save H2 homography matrix") #"/home/tzuchichen/perception-fusion/ros1_ws/src/image_processing/stitched_results/homography/H2_1.npy"
     args = parser.parse_args()
     main(args)
 

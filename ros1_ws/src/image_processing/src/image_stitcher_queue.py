@@ -18,9 +18,9 @@ class ROSImageStitcher:
         rospy.init_node('image_stitcher', anonymous=True)
 
         # Load parameters
-        self.left_topic = rospy.get_param('~sub_camera_topic_left', '/camera_left/color/image_raw/compressed')
-        self.mid_topic = rospy.get_param('~sub_camera_topic_mid', '/camera_middle/color/image_raw/compressed')
-        self.right_topic = rospy.get_param('~sub_camera_topic_right', '/camera_right/color/image_raw/compressed')
+        self.left_topic = rospy.get_param('~sub_camera_topic_left', '/camera3/color/image_raw/compressed')
+        self.mid_topic = rospy.get_param('~sub_camera_topic_mid', '/camera2/color/image_raw/compressed')
+        self.right_topic = rospy.get_param('~sub_camera_topic_right', '/camera1/color/image_raw/compressed')
         self.output_topic = rospy.get_param('~pub_camera_topic', '/camera_stitched/color/image_raw/compressed')
         self.output_dir = rospy.get_param('~output_dir', 'stitched_results')
         self.h1_path = rospy.get_param('~h1_path', None)
@@ -143,6 +143,10 @@ class ROSImageStitcher:
         final_image = stitcher.stitching(
             img_left, img_right, flip=False, H=H2, save_H_path=(None if H2 is not None else os.path.join(homography_dir, f"H2_{self.image_index}.npy"))
         )
+
+        # mid_height, mid_width, _ = mid_image.shape
+        # final_height, final_width, _ = final_image.shape
+        # final_image[0:final_height, final_width // 2 - mid_width // 2:final_width // 2 + mid_width // 2] = mid_image
 
         if final_image is None:
             rospy.loginfo(f"Skipping final stitching for image set {self.image_index} due to missing or invalid stitching.")
