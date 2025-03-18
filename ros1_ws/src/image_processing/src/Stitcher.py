@@ -45,24 +45,45 @@ class Stitcher():
     def __init__(self):
         pass
 
+    # def remove_black_border(self, img):
+    #     # Convert image to grayscale
+    #     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #     # Threshold the image to create a binary mask
+    #     _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+    #     # Find contours in the binary mask
+    #     contours, _, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    #     # Find the largest contour which will be the stitched area
+    #     max_area = 0
+    #     best_rect = (0, 0, img.shape[1], img.shape[0])
+    #     for cnt in contours:
+    #         x, y, w, h = cv2.boundingRect(cnt)
+    #         area = w * h
+    #         if area > max_area:
+    #             max_area = area
+    #             best_rect = (x, y, w, h)
+    #     x, y, w, h = best_rect
+    #     return img[y:y+h, x:x+w]
+
     def remove_black_border(self, img):
         # Convert image to grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        # Threshold the image to create a binary mask
+        
+        # Create a binary mask where non-black pixels are white (255)
         _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
-        # Find contours in the binary mask
-        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        # Find the largest contour which will be the stitched area
-        max_area = 0
-        best_rect = (0, 0, img.shape[1], img.shape[0])
-        for cnt in contours:
-            x, y, w, h = cv2.boundingRect(cnt)
-            area = w * h
-            if area > max_area:
-                max_area = area
-                best_rect = (x, y, w, h)
-        x, y, w, h = best_rect
-        return img[y:y+h, x:x+w]
+        
+        # Find non-zero pixel locations
+        coords = cv2.findNonZero(thresh)
+
+        if coords is None:
+            return img  # Return the original image if no valid pixels found
+
+        # Get the bounding box of non-zero pixels
+        x, y, w, h = cv2.boundingRect(coords)
+
+        # Crop the image using the bounding box
+        cropped = img[y:y+h, x:x+w]
+
+        return cropped
 
     def linearBlending(self, img_left, img_right):
         # Find the dimensions of the final blended image
@@ -126,7 +147,7 @@ class Stitcher():
             src_pts = []
             dst_pts = []
             for m, n in matches:
-                if m.distance < 0.75 * n.distance:
+                if m.distance < 0.4 * n.distance:
                     good_matches.append(m)
                     src_pts.append(kp1[m.queryIdx].pt)
                     dst_pts.append(kp2[m.trainIdx].pt)
@@ -174,6 +195,7 @@ class Stitcher():
         print('Cropping Result...')
         cropping_start = time.time()
         cropped_result = self.remove_black_border(blended)
+        # cropped_result = blended
         print(f'Cropping took {time.time() - cropping_start:.2f} seconds.')
 
         return cropped_result
@@ -256,9 +278,9 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Stitch images from left, mid, and right folders.")
-    parser.add_argument('--left', type=str, default="/home/tzuchichen/boats_dataset_processing/bags_processing/0226_ks_images/2025-02-26-13-58-01_1_left", help="Directory for left images")
-    parser.add_argument('--mid', type=str, default="/home/tzuchichen/boats_dataset_processing/bags_processing/0226_ks_images/2025-02-26-13-58-01_1_mid", help="Directory for mid images")  #2025-02-26-13-48-46_0_mid
-    parser.add_argument('--right', type=str, default="/home/tzuchichen/boats_dataset_processing/bags_processing/0226_ks_images/2025-02-26-13-58-01_1_right", help="Directory for right images")
+    parser.add_argument('--left', type=str, default="/home/arg/perception-fusion/20250318-fix_images/fix_image_2025-03-19-03-31-14_left", help="Directory for left images")
+    parser.add_argument('--mid', type=str, default="/home/arg/perception-fusion/20250318-fix_images/fix_image_2025-03-19-03-31-14_mid", help="Directory for mid images")  #2025-02-26-13-48-46_0_mid
+    parser.add_argument('--right', type=str, default="/home/arg/perception-fusion/20250318-fix_images/fix_image_2025-03-19-03-31-14_right", help="Directory for right images")
     parser.add_argument('--output_dir', type=str, default="stitched_images", help="Output directory for images, video, and homographies")
     parser.add_argument('--h1_path', type=str, default=None, help="Path to save H1 homography matrix") #"/home/tzuchichen/perception-fusion/ros1_ws/src/image_processing/stitched_results/homography/H1_1.npy"
     parser.add_argument('--h2_path', type=str, default=None, help="Path to save H2 homography matrix") #"/home/tzuchichen/perception-fusion/ros1_ws/src/image_processing/stitched_results/homography/H2_1.npy"
