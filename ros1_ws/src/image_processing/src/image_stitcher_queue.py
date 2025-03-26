@@ -107,7 +107,7 @@ class ROSImageStitcher:
         os.makedirs(output_dir, exist_ok=True)
 
         intermediate_dir = os.path.join(output_dir, 'intermediate')
-        homography_dir = os.path.join(output_dir, 'homography')
+        homography_dir = os.path.join(output_dir, 'homography', 'test_h')
         os.makedirs(intermediate_dir, exist_ok=True)
         os.makedirs(homography_dir, exist_ok=True)
 

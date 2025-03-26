@@ -70,11 +70,22 @@ class ROSImageScale:
             # Camera intrinsic parameters (provided earlier)
             if height == 480 and width == 640:
                 # 640x480 camera
+                # K = np.array([
+                #     [610.0, 0.0, 320.0],
+                #     [0.0, 610.0, 240.0],
+                #     [0.0, 0.0, 1.0]
+                # ])
                 K = np.array([
-                    [610.0, 0.0, 320.0],
-                    [0.0, 610.0, 240.0],
+                    [219.11268079, 0.0, 335.02464347],
+                    [0.0, 291.76661082, 237.94837061],
                     [0.0, 0.0, 1.0]
                 ])
+                # K = np.array([
+                #     [219.11268079, 0.0, 320.0],
+                #     [0.0, 219.11268079, 240.0],
+                #     [0.0, 0.0, 1.0]
+                # ])
+
             elif height == 720 and width == 1280:
                 # 1280x720 camera
                 K = np.array([
@@ -98,7 +109,7 @@ class ROSImageScale:
 
         # Camera parameters
         cx, cy, cz = 0, 3, 0 # Camera position (x, y, z in meters)
-        fov_angles = np.arange(-60, 65, 5) # -60° to +60° in 15° steps
+        fov_angles = np.arange(-60, 65, 15) # -60° to +60° in 15° steps
         ranges = [50, 100, 150]  # Fan-like markers in meters
         range_colors = [(0, 0, 255), (0, 255, 255), (0, 255, 0)]  # Red, Yellow, Green
 
@@ -147,7 +158,6 @@ class ROSImageScale:
                 text_y = v2 + text_size[1] // 2
                 cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.3, color, 1)
 
-        fov_angles = np.arange(-60, 65, 5)  # -60° to +60° in 15° steps
         # Draw vertical lines at every 5 degrees for 200m distances
         for angle in fov_angles:
             rad = np.radians(angle)
@@ -156,31 +166,34 @@ class ROSImageScale:
             Z = np.cos(rad) * 200  # Extend lines to 200m ahead
             u, v = project_to_image(X, Y, Z)
             u1 = u
-            v1 = 50
+            v1 = height // 3
             u2 = u
-            v2 = 70
+            v2 = height // 3 + 20
             if u1 < 0 or u1 >= width or v1 < 0 or v1 >= height or u2 < 0 or u2 >= width or v2 < 0 or v2 >= height:
                 continue
+            cv2.line(image, (u1, v1), (u2, v2), (0, 0, 0), 4)
             cv2.line(image, (u1, v1), (u2, v2), (255, 255, 255), 2)
             # add degree text and put center of the line
             if self.camera_orientation == 'left':
-                text = f"{angle-35}"
+                text = f"{angle-60}"
             elif self.camera_orientation == 'mid':
                 text = f"{angle}"
             elif self.camera_orientation == 'right':
-                text = f"{angle+35}"
+                text = f"{angle+60}"
             else:
                 raise ValueError("Error: Invalid camera orientation.")
             text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
             text_x = u - text_size[0] // 2
             text_y = v2 + text_size[1] + 5
+            cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
             cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
         # add "Degree" text
         text = "Degree"
         text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
         text_x = width // 2 - text_size[0] // 2
-        text_y = 30
+        text_y = height // 3 - 10
+        cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
         cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
         return image

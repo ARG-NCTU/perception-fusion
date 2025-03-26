@@ -15,5 +15,12 @@ rosbag record -O $BAGS \
     /camera1/color/image_raw/compressed \
     /camera2/color/image_raw/compressed \
     /camera3/color/image_raw/compressed \
+    /camera1_fix/color/image_raw/compressed \
+    /camera2_fix/color/image_raw/compressed \
+    /camera3_fix/color/image_raw/compressed \
     /camera_stitched/color/image_raw/compressed \
+    /camera1/scaled/compressed \
+    /camera2/scaled/compressed \
+    /camera3/scaled/compressed \
+    /camera_stitched/scaled/compressed \
     /detection_result_img/camera_stitched/compressed

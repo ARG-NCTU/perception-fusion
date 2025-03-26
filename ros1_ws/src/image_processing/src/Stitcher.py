@@ -45,45 +45,45 @@ class Stitcher():
     def __init__(self):
         pass
 
-    # def remove_black_border(self, img):
-    #     # Convert image to grayscale
-    #     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    #     # Threshold the image to create a binary mask
-    #     _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
-    #     # Find contours in the binary mask
-    #     contours, _, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    #     # Find the largest contour which will be the stitched area
-    #     max_area = 0
-    #     best_rect = (0, 0, img.shape[1], img.shape[0])
-    #     for cnt in contours:
-    #         x, y, w, h = cv2.boundingRect(cnt)
-    #         area = w * h
-    #         if area > max_area:
-    #             max_area = area
-    #             best_rect = (x, y, w, h)
-    #     x, y, w, h = best_rect
-    #     return img[y:y+h, x:x+w]
-
     def remove_black_border(self, img):
         # Convert image to grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        
-        # Create a binary mask where non-black pixels are white (255)
+        # Threshold the image to create a binary mask
         _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+        # Find contours in the binary mask
+        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        # Find the largest contour which will be the stitched area
+        max_area = 0
+        best_rect = (0, 0, img.shape[1], img.shape[0])
+        for cnt in contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+            area = w * h
+            if area > max_area:
+                max_area = area
+                best_rect = (x, y, w, h)
+        x, y, w, h = best_rect
+        return img[y:y+h, x:x+w]
+
+    # def remove_black_border(self, img):
+    #     # Convert image to grayscale
+    #     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
-        # Find non-zero pixel locations
-        coords = cv2.findNonZero(thresh)
+    #     # Create a binary mask where non-black pixels are white (255)
+    #     _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+        
+    #     # Find non-zero pixel locations
+    #     coords = cv2.findNonZero(thresh)
 
-        if coords is None:
-            return img  # Return the original image if no valid pixels found
+    #     if coords is None:
+    #         return img  # Return the original image if no valid pixels found
 
-        # Get the bounding box of non-zero pixels
-        x, y, w, h = cv2.boundingRect(coords)
+    #     # Get the bounding box of non-zero pixels
+    #     x, y, w, h = cv2.boundingRect(coords)
 
-        # Crop the image using the bounding box
-        cropped = img[y:y+h, x:x+w]
+    #     # Crop the image using the bounding box
+    #     cropped = img[y:y+h, x:x+w]
 
-        return cropped
+    #     return cropped
 
     def linearBlending(self, img_left, img_right):
         # Find the dimensions of the final blended image
@@ -147,7 +147,7 @@ class Stitcher():
             src_pts = []
             dst_pts = []
             for m, n in matches:
-                if m.distance < 0.4 * n.distance:
+                if m.distance < 0.7 * n.distance:
                     good_matches.append(m)
                     src_pts.append(kp1[m.queryIdx].pt)
                     dst_pts.append(kp2[m.trainIdx].pt)
@@ -231,7 +231,7 @@ def main(args):
     left_images, base_images, right_images, output_images_dir = setting.file_setting()
 
     intermediate_dir = os.path.join(args.output_dir, 'intermediate')
-    homography_dir = os.path.join(args.output_dir, 'homography')
+    homography_dir = os.path.join(args.output_dir, 'homography', 'test_h')
     os.makedirs(intermediate_dir, exist_ok=True)
     os.makedirs(homography_dir, exist_ok=True)
     

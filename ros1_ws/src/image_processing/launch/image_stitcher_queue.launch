@@ -6,9 +6,9 @@
     <!-- <arg name="resolution" default="1280x720"/> -->
     <!-- <arg name="resolution" default="1920x1080"/> -->
 
-    <arg name="H_index" default="14"/>
+    <arg name="H_index" default="17"/>
 
-    <arg name="stitch_scale" default="False"/>
+    <arg name="stitch_scale" default="True"/>
 
     <node name="source_image_stitcher_queue" pkg="image_processing" type="image_stitcher_queue.py" output="screen">
         <param name="sub_camera_topic_left" value="/camera3_fix/color/image_raw/compressed"/> 
