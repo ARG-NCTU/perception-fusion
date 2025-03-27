@@ -22,9 +22,9 @@ class ScaleManualTools:
 
         if not os.path.exists(self.json_path):
             os.makedirs(os.path.dirname(self.json_path), exist_ok=True)
-            default_points = {str(deg): None for deg in range(-90, 91, 15)}
+            default_points = {str(deg): None for deg in range(-90, 91, 5)}  # Changed to 5-degree steps
             with open(self.json_path, 'w') as f:
-                json.dump(default_points, f)
+                json.dump(default_points, f, indent=4)
                 rospy.loginfo(f"Created JSON file at {self.json_path} with default points")
         else:
             rospy.loginfo(f"Loaded JSON file from {self.json_path}")
@@ -41,17 +41,17 @@ class ScaleManualTools:
         self.points_lock = Lock()
         self.load_points()
 
-        self.raw_image = None
         self.scaled_image = None
         self.image_lock = Lock()
 
         cv2.namedWindow('Scale Tools')
         cv2.setMouseCallback('Scale Tools', self.mouse_callback)
-        cv2.createTrackbar('Angle', 'Scale Tools', 6, 12, self.angle_callback)
+        # Trackbar: -90 to 90 with 5-degree steps = 37 positions (0 to 36), start at 18 (-90 + 18*5 = 0)
+        cv2.createTrackbar('Angle', 'Scale Tools', 18, 36, self.angle_callback)
         rospy.loginfo("GUI initialized. Use 'a' to toggle Add, 'c' to Confirm, 'r' to Clear")
 
     def load_points(self):
-        default_points = {str(deg): None for deg in range(-90, 91, 15)}
+        default_points = {str(deg): None for deg in range(-90, 91, 5)}  # 5-degree steps
         try:
             with open(self.json_path, 'r') as f:
                 loaded_points = json.load(f)
@@ -70,7 +70,7 @@ class ScaleManualTools:
             rospy.loginfo(f"Saved points: {self.points}")
 
     def angle_callback(self, pos):
-        self.current_angle = (pos - 6) * 15
+        self.current_angle = (pos - 18) * 5  # Maps 0-36 to -90 to 90 in 5-degree steps
         self.add_mode = False
         self.drag_point = None
         with self.points_lock:
@@ -107,22 +107,22 @@ class ScaleManualTools:
     def image_scale_manual(self, image):
         height, width = image.shape[:2]
         ref_points = {}
-        for angle in range(-90, 91, 15):
+        for angle in range(-90, 91, 5):  # Changed to 5-degree steps
             x = int(width/2 + (width/2) * np.tan(np.radians(angle)))
             if 0 <= x < width:
                 ref_points[angle] = [x, height//2]
 
         for angle, pos in ref_points.items():
-            cv2.circle(image, (pos[0], pos[1]), 5, (0, 255, 0), -1)
+            cv2.circle(image, (pos[0], pos[1]), 3, (0, 255, 0), -1)  # Smaller green points (radius 3)
 
         with self.points_lock:
             current_point = self.points.get(str(self.current_angle))
-            if current_point and not self.add_mode:  # Only draw saved point in blank mode
+            if current_point and not self.add_mode:  # Blue point in blank mode
                 x, y = current_point
-                cv2.circle(image, (x, y), 10, (0, 0, 255), -1)  # Blue for saved point
+                cv2.circle(image, (x, y), 5, (0, 0, 255), -1)  # Smaller blue point (radius 5)
 
         if self.add_mode and self.drag_point:
-            cv2.circle(image, (self.drag_point[0], self.drag_point[1]), 10, (255, 0, 0), -1)  # Red for draggable point
+            cv2.circle(image, (self.drag_point[0], self.drag_point[1]), 5, (255, 0, 0), -1)  # Smaller red point (radius 5)
 
         cv2.putText(image, f"Angle: {self.current_angle}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
         cv2.putText(image, "a: Add, c: Confirm, r: Clear", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
@@ -140,12 +140,10 @@ class ScaleManualTools:
             scaled_image = self.image_scale_manual(image.copy())
 
             with self.image_lock:
-                self.raw_image = image
                 self.scaled_image = scaled_image
 
             output_dir = os.path.join(rospack.get_path('image_processing'), 'output')
             os.makedirs(output_dir, exist_ok=True)
-            cv2.imwrite(os.path.join(output_dir, 'raw_image.png'), image)
             cv2.imwrite(os.path.join(output_dir, 'scaled_image.png'), scaled_image)
 
             scaled_msg = self.bridge.cv2_to_compressed_imgmsg(scaled_image)
