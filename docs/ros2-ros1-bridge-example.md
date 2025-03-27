@@ -93,8 +93,40 @@ source environment_ros2_ros1_bridge.sh
 
 3. Run Ros1_bridge
 
+3.1. Dynamic Bridge
+
+For all ROS1 & ROS2 topics
 ```bash
 ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
+```
+
+For all ROS1 topics
+```bash
+ros2 run ros1_bridge dynamic_bridge --bridge-all-1to2-topics
+```
+
+For all ROS2 topics
+```bash
+ros2 run ros1_bridge dynamic_bridge --bridge-all-2to1-topics
+```
+
+3.2. Parameter Bridge
+
+For ROS1 to ROS2 all specific topics
+```bash
+rosparam load ros2_ros1_bridge_ws/src/ros1_bridge/config/bridge_1to2_params.yaml
+ros2 run ros1_bridge parameter_bridge
+```
+
+For ROS2 to ROS1 all specific topics
+```bash
+rosparam load ros2_ros1_bridge_ws/src/ros1_bridge/config/bridge_2to1_params.yaml
+ros2 run ros1_bridge parameter_bridge
+```
+
+3.3. Search all ROS1 ROS2 pair msg types available for bridge 
+```bash
+ros2 run ros1_bridge dynamic_bridge --print-pairs
 ```
 
 ### Download bags
