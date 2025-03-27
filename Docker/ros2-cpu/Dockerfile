@@ -129,9 +129,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ########################################## velodyne ####################################
 
-# RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
-#     ros-${ROS_DISTRO}-velodyne* \
-#     && rm -rf /var/lib/apt/lists/*
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-velodyne* \
+    && rm -rf /var/lib/apt/lists/*
 
 # ###################################### APRILTAG ROS2 ######################################
 

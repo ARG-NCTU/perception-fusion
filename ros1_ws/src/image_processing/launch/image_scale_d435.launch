@@ -1,0 +1,24 @@
+<launch>
+
+    <node name="image_scale_left" pkg="image_processing" type="image_scale_d435.py" output="screen">
+        <param name="sub_camera_topic" value="/camera3/color/image_raw/compressed"/> 
+        <param name="camera_orientation" value="right"/>
+        <param name="sub_camera_info_topic" value="/camera3/color/camera_info"/>
+        <param name="pub_camera_topic" value="/camera3/scaled/compressed"/> 
+    </node>
+
+    <node name="image_scale_mid" pkg="image_processing" type="image_scale_d435.py" output="screen">
+        <param name="sub_camera_topic" value="/camera2/color/image_raw/compressed"/> 
+        <param name="camera_orientation" value="mid"/>
+        <param name="sub_camera_info_topic" value="/camera2/color/camera_info"/>
+        <param name="pub_camera_topic" value="/camera2/scaled/compressed"/>
+    </node>
+
+    <node name="image_scale_right" pkg="image_processing" type="image_scale_d435.py" output="screen">
+        <param name="sub_camera_topic" value="/camera1/color/image_raw/compressed"/> 
+        <param name="camera_orientation" value="left"/>
+        <param name="sub_camera_info_topic" value="/camera1/color/camera_info"/>
+        <param name="pub_camera_topic" value="/camera1/scaled/compressed"/>
+    </node>
+
+</launch>

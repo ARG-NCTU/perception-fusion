@@ -71,8 +71,21 @@ class ROSImageScale:
             if height == 480 and width == 640:
                 # 640x480 camera
                 K = np.array([
-                    [219.11268079, 0.0, 335.02464347],
-                    [0.0, 291.76661082, 237.94837061],
+                    [610.0, 0.0, 320.0],
+                    [0.0, 610.0, 240.0],
+                    [0.0, 0.0, 1.0]
+                ])
+            elif height == 720 and width == 1280:
+                # 1280x720 camera
+                K = np.array([
+                    [911.0, 0.0, 640.0],
+                    [0.0, 911.0, 360.0],
+                    [0.0, 0.0, 1.0]
+                ])
+            elif height == 1080 and width == 1920:
+                K = np.array([
+                    [1366.0, 0.0, 960.0],
+                    [0.0, 1366.0, 540.0],
                     [0.0, 0.0, 1.0]
                 ])
             else:
@@ -85,7 +98,7 @@ class ROSImageScale:
 
         # Camera parameters
         cx, cy, cz = 0, 3, 0 # Camera position (x, y, z in meters)
-        fov_angles = np.arange(-60, 65, 15) # -60° to +60° in 15° steps
+        fov_angles = np.arange(-60, 65, 5) # -60° to +60° in 5° steps
         ranges = [50, 100, 150]  # Fan-like markers in meters
         range_colors = [(0, 0, 255), (0, 255, 255), (0, 255, 0)]  # Red, Yellow, Green
 
@@ -151,11 +164,11 @@ class ROSImageScale:
             cv2.line(image, (u1, v1), (u2, v2), (255, 255, 255), 2)
             # add degree text and put center of the line
             if self.camera_orientation == 'left':
-                text = f"{angle-60}"
+                text = f"{angle-35}"
             elif self.camera_orientation == 'mid':
                 text = f"{angle}"
             elif self.camera_orientation == 'right':
-                text = f"{angle+60}"
+                text = f"{angle+35}"
             else:
                 raise ValueError("Error: Invalid camera orientation.")
             text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]

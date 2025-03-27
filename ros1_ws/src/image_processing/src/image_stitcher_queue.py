@@ -23,8 +23,8 @@ class ROSImageStitcher:
         self.right_topic = rospy.get_param('~sub_camera_topic_right', '/camera1/color/image_raw/compressed')
         self.output_topic = rospy.get_param('~pub_camera_topic', '/camera_stitched/color/image_raw/compressed')
         self.output_dir = rospy.get_param('~output_dir', 'stitched_results')
-        self.h1_path = rospy.get_param('~h1_path', None)
-        self.h2_path = rospy.get_param('~h2_path', None)
+        self.h1_path = rospy.get_param('~h1_path', None) if rospy.get_param('~h1_path', None) != "None" else None
+        self.h2_path = rospy.get_param('~h2_path', None) if rospy.get_param('~h2_path', None) != "None" else None
 
         # Bridge for converting ROS images to OpenCV
         self.bridge = CvBridge()
@@ -153,7 +153,7 @@ class ROSImageStitcher:
             return None
 
         # Save the stitched image
-        if not self.h1_path and not self.h2_path:
+        if self.h1_path is None and self.h2_path is None:
             images_dir = os.path.join(output_dir, 'stitched_images')
             os.makedirs(images_dir, exist_ok=True)
             cv2.imwrite(os.path.join(images_dir, f"{self.image_index}.png"), final_image)
