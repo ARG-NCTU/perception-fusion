@@ -119,7 +119,7 @@ RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
     libpcl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN sudo -H pip install transforms3d
+RUN sudo -H pip install numpy==1.24.4 transforms3d cupy-cuda12x 
 
 ##################################### setting ##########################################
 

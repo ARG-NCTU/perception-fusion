@@ -66,8 +66,14 @@ source environment_ros2.sh
 
 3. Visualize Radar
 
+For CPU usage
 ```bash
-ros2 launch pointcloud_processing demo.launch.py
+ros2 launch pointcloud_processing pointcloud_to_image.launch.py
+```
+
+For GPU usage
+```bash
+ros2 launch pointcloud_processing pointcloud_to_image_gpu.launch.py
 ```
 
 ### Terminal 2: Play Radar Ros2 Bag (or Run Radar)

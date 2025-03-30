@@ -41,6 +41,7 @@ fi
 docker run \
   -it \
   --rm \
+  --runtime=nvidia \
   -e DISPLAY \
   -e XAUTHORITY=$XAUTH \
   -e REPO_NAME=$REPO_NAME \

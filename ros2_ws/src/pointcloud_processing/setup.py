@@ -35,6 +35,7 @@ setup(
             'transform_pointcloud = pointcloud_processing.transform_pointcloud:main',
             'transform_laserscan = pointcloud_processing.transform_laserscan:main',
             'pointcloud_to_image = pointcloud_processing.pointcloud_to_image:main',
+            'pointcloud_to_image_gpu = pointcloud_processing.pointcloud_to_image_gpu:main',
             'save_pointcloud = pointcloud_processing.save_pointcloud:main',
             'laserscan_qos = pointcloud_processing.laserscan_qos:main',
         ],
