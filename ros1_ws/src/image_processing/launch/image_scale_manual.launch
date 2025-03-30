@@ -1,0 +1,9 @@
+<launch>
+
+    <node name="image_scale_left" pkg="image_processing" type="image_scale_manual.py" output="screen">
+        <param name="sub_camera_topic" value="/camera_stitched/scaled/compressed"/> 
+        <param name="pub_camera_topic" value="/camera_stitched/manual_scaled/compressed"/> 
+        <param name="~json_path" value="$(find image_processing)/config/points.json"/>
+    </node>
+
+</launch>

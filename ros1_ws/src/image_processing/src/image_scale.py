@@ -95,18 +95,18 @@ class ROSImageScale:
             
             return u, v
 
-        # Draw FOV radial lines (-60° to +60°)
-        for angle in fov_angles:
-            rad = np.radians(angle)
-            X = np.sin(rad) * 200  # X-position based on angle
-            Y = 0  # Camera height
-            Z = np.cos(rad) * 200  # Extend lines to 200m ahead
-            u, v = project_to_image(X, Y, Z)
-            origin_u = int(u0)
-            origin_v = int(v0 + fy)
-            if u < 0 or u >= width or v < 0 or v >= height:
-                continue
-            cv2.line(image, (origin_u, origin_v), (u, v), (255, 255, 255), 2)
+        # # Draw FOV radial lines (-60° to +60°)
+        # for angle in fov_angles:
+        #     rad = np.radians(angle)
+        #     X = np.sin(rad) * 200  # X-position based on angle
+        #     Y = 0  # Camera height
+        #     Z = np.cos(rad) * 200  # Extend lines to 200m ahead
+        #     u, v = project_to_image(X, Y, Z)
+        #     origin_u = int(u0)
+        #     origin_v = int(v0 + fy)
+        #     if u < 0 or u >= width or v < 0 or v >= height:
+        #         continue
+        #     cv2.line(image, (origin_u, origin_v), (u, v), (255, 255, 255), 2)
 
         # Draw perpendicular lines every 15 degrees for 50m, 100m, 150m distances
         for r, color in zip(ranges, range_colors):
@@ -134,7 +134,7 @@ class ROSImageScale:
                 text_y = v2 + text_size[1] // 2
                 cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.3, color, 1)
 
-        # Draw vertical lines at every 5 degrees for 200m distances
+        # Draw vertical lines at every 15 degrees for 200m distances
         for angle in fov_angles:
             rad = np.radians(angle)
             X = np.sin(rad) * 200  # X-position based on angle
@@ -165,12 +165,12 @@ class ROSImageScale:
             cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
         # add "Degree" text
-        text = "Degree"
-        text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
-        text_x = width // 2 - text_size[0] // 2
-        text_y = height // 3 - 10
-        cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
-        cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        # text = "Degree"
+        # text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+        # text_x = width // 2 - text_size[0] // 2
+        # text_y = height // 3 - 10
+        # cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+        # cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
         return image
     
