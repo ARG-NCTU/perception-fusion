@@ -106,70 +106,62 @@ class PointCloud2Image(Node):
     def process_pointcloud(self, msg):
         # Read points from PointCloud2
         field_names = [field.name for field in msg.fields]
-        points = list(pc2.read_points(msg, field_names=tuple(field_names), skip_nans=True))
+        points_structured = pc2.read_points(msg, field_names=tuple(field_names), skip_nans=True)
+        
+        # Convert structured data to a flat NumPy array
+        points = np.array([tuple(point) for point in points_structured], dtype=np.float32)
         if len(points) == 0:
             return
 
-        # Convert points into a 2D numpy array
-        points_array = np.array([list(point) for point in points], dtype=float)
+        # Extract xyz and intensity
+        xyz = points[:, :3]
+        intensity = points[:, 3] if points.shape[1] > 3 else None
 
-        # Separate the 3D points and intensity if available
-        xyz = points_array[:, :3]  # Extract (x, y, z)
-        intensity = points_array[:, 3] if points_array.shape[1] > 3 else None
-
-        # Generate an intensity image
-        img_width = 480
-        img_height = 480
+        # Image setup
+        img_width, img_height = 480, 480
         intensity_image = np.zeros((img_height, img_width, 3), dtype=np.uint8)
-
         range_min, range_max = -self.range, self.range
+
+        # Compute pixel coordinates in bulk
+        u = ((xyz[:, 1] - range_min) / (range_max - range_min) * img_width - img_width / 2).astype(int)
+        v = ((xyz[:, 0] - range_min) / (range_max - range_min) * img_height - img_height / 2).astype(int)
+        u = img_height // 2 - u
+        v = img_width // 2 - v
+
+        # Filter valid coordinates
+        mask = (0 <= u) & (u < img_width) & (0 <= v) & (v < img_height)
+        u, v = u[mask], v[mask]
 
         if intensity is not None:
             intensity_normalized = (intensity - intensity.min()) / (intensity.max() - intensity.min())
-            for i, (x, y, z) in enumerate(xyz):
-                u = int((y - range_min) / (range_max - range_min) * img_width - img_width / 2)
-                v = int((x - range_min) / (range_max - range_min) * img_height - img_height / 2)
-                u = img_height // 2 - u
-                v = img_width // 2 - v
-                if 0 <= u < img_width and 0 <= v < img_height:
-                    if self.use_grayscale:
-                        gray_value = int(intensity_normalized[i] * 255)
-                        color = (gray_value, gray_value, gray_value)
-                    else:
-                        color = cv2.applyColorMap(
-                            np.uint8(intensity_normalized[i] * 255).reshape((1, 1)),
-                            cv2.COLORMAP_JET
-                        )[0, 0]
-                    cv2.circle(intensity_image, (u, v), self.circle_radius, tuple(map(int, color)), -1)
-        else:
-            for (x, y, z) in xyz:
-                u = int((y - range_min) / (range_max - range_min) * img_width - img_width / 2)
-                v = int((x - range_min) / (range_max - range_min) * img_height - img_height / 2)
-                u = img_height // 2 - u
-                v = img_width // 2 - v
-                if 0 <= u < img_width and 0 <= v < img_height:
-                    cv2.circle(intensity_image, (u, v), self.circle_radius, (255, 255, 255), -1)
+            intensity_norm = intensity_normalized[mask]
 
-        # Compress the image
+            if self.use_grayscale:
+                gray_values = (intensity_norm * 255).astype(np.uint8)
+                colors = np.stack([gray_values, gray_values, gray_values], axis=-1)
+            else:
+                colors = cv2.applyColorMap(np.uint8(intensity_norm * 255), cv2.COLORMAP_JET)[:, 0, :]
+            
+            # Assign colors directly (this is still per-pixel, see next optimization for further speedup)
+            intensity_image[u, v] = colors
+        else:
+            intensity_image[u, v] = [255, 255, 255]
+
+        # Compress and publish
         _, compressed_image = cv2.imencode('.jpg', intensity_image)
         compressed_msg = CompressedImage()
         compressed_msg.header.stamp = msg.header.stamp
         compressed_msg.format = "jpeg"
         compressed_msg.data = compressed_image.tobytes()
-
-        # Publish the compressed image
         self.publisher.publish(compressed_msg)
 
-        # Save the image to a file if enabled
+        # Save if enabled
         if self.save_images:
             timestamp = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
             timestamp_str = f"{timestamp:.6f}".replace(".", "_")
             filename = os.path.join(self.current_save_directory, f'image_{timestamp_str}.jpg')
             cv2.imwrite(filename, intensity_image)
             self.get_logger().info(f"Saved image to {filename}")
-
-
-
 
 def main(args=None):
     rclpy.init(args=args)
