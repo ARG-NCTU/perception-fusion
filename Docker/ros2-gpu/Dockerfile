@@ -121,6 +121,12 @@ RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
 
 RUN sudo -H pip install numpy==1.24.4 transforms3d cupy-cuda12x 
 
+##################################### cyclonedds ######################################
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-rmw-cyclonedds-cpp && \
+    rm -rf /var/lib/apt/lists/*
+
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/

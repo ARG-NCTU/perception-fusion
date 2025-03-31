@@ -48,6 +48,7 @@ docker run \
   -e HOME=/home/${USER_NAME} \
   -e OPENAI_API_KEY=$OPENAI_API_KEY\
   -e NVIDIA_DRIVER_CAPABILITIES=all \
+  -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
   -v "$XAUTH:$XAUTH" \
   -v "/home/${USER}/${PROJ_NAME}:/home/${USER_NAME}/${PROJ_NAME}" \
   -v "/tmp/.X11-unix:/tmp/.X11-unix" \
