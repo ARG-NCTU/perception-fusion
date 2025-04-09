@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMG="argnctu/perception-fusion:ros1-ros2"
+IMG="argnctu/perception-fusion:ros-humble-minimal"
 
 # Get the full path and name of the script
 # See https://bit.ly/3zHMisF

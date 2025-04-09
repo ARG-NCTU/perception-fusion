@@ -24,34 +24,36 @@ cd perception-fusion
 
 ## Set up Environment
 
-1. Enter Docker Enviroment
+1. Build ROS-HUMBLE-ROS1-Bridge package
 
-1.1. Docker Run
+1.1. Pull the Builder Docker Image
+
+```bash
+source Docker/ros-humble-ros1-bridge-builder/pull.sh
+```
+
+1.2. Build ROS-HUMBLE-ROS1-Bridge package
+
+```bash
+source build_bridge_package.sh
+```
+
+2. Enter Docker Enviroment
+
+2.1. Docker Run
 
 Run this script to pull docker image to your workstation.
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros-humble-minimal/run.sh
 ```
 
-1.2. Docker Join
+2.2. Docker Join
 
 If want to enter same docker image, type below command.
 
 ```bash
-source Docker/ros1-ros2/run.sh
-```
-
-2. Building All ROS1 package
-
-```bash
-source build_ros1_all.sh
-```
-
-3. Building ROS2 ROS1 bridge
-
-```bash
-source build_ros2_ros1_bridge.sh
+source Docker/ros-humble-minimal/run.sh
 ```
 
 ## Usage
@@ -60,10 +62,8 @@ source build_ros2_ros1_bridge.sh
 
 1. Docker Run
 
-Run this script to pull docker image to your workstation.
-
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros1-cpu/run.sh
 ```
 
 2. Source ROS1 Environment
@@ -77,18 +77,19 @@ source environment_ros1.sh
 ```bash
 roscore
 ```
+
 ### Terminal 2: ROS1 & ROS2 BRIDGE
 
 1. Docker Run
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros-humble-minimal/run.sh
 ```
 
 2. Source ROS1 & ROS2 Environment
 
 ```bash
-source environment_ros2_ros1_bridge.sh
+source environment_ros_humble_ros1_bridge.sh
 ```
 
 3. Run Ros1_bridge
@@ -112,15 +113,39 @@ ros2 run ros1_bridge dynamic_bridge --bridge-all-2to1-topics
 
 3.2. Parameter Bridge
 
-For ROS1 to ROS2 all specific topics
+3.2.1. Docker Run In ROS1 Docker
+
+Run this command in a new terminal
+
 ```bash
-rosparam load ros2_ros1_bridge_ws/src/ros1_bridge/config/bridge_1to2_params.yaml
-ros2 run ros1_bridge parameter_bridge
+source Docker/ros1-cpu/run.sh
 ```
 
-For ROS2 to ROS1 all specific topics
+3.2.2. Source ROS1 Environment
+
 ```bash
-rosparam load ros2_ros1_bridge_ws/src/ros1_bridge/config/bridge_2to1_params.yaml
+source environment_ros1.sh
+```
+
+3.2.3. Load parameters
+
+Write your own yaml file (ros1 type) or use
+
+```bash
+rosparam load config/bridge_1to2_params.yaml
+```
+
+```bash
+rosparam load config/bridge_2to1_params.yaml
+```
+
+If you are not sure the ros1 type, run step 3.3. in bridging terminal
+
+3.2.4. Run parameter bridge
+
+Back to bridging terminal, for all specific topics bridges
+
+```bash
 ros2 run ros1_bridge parameter_bridge
 ```
 
@@ -138,7 +163,7 @@ Please download bags folder and put in the root path of the repo: [Link](http://
 1. Docker Run
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros1-cpu/run.sh
 ```
 
 2. Source ROS1 Environment
@@ -166,7 +191,7 @@ rosbag play 2024-11-23-15-28-44_0.bag
 1. Docker Run
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros2-cpu/run.sh
 ```
 
 2. Source ROS2 Environment
@@ -187,7 +212,7 @@ ros2 bag play recorded_rosbag_halo_20241123-141728_0.db3
 1. Docker Run
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros1-cpu/run.sh
 ```
 
 2. Source ROS1 Environment
@@ -206,7 +231,7 @@ rviz -d rviz/radar-example.rviz
 1. Docker Run
 
 ```bash
-source Docker/ros1-ros2/run.sh
+source Docker/ros2-cpu/run.sh
 ```
 
 2. Source ROS2 Environment

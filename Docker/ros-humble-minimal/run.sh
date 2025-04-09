@@ -4,10 +4,10 @@ ARGS=("$@")
 
 PROJ_NAME="perception-fusion"
 
-IMG="argnctu/perception-fusion:ros1-ros2"
+IMG="argnctu/perception-fusion:ros-humble-minimal"
 
 USER_NAME="arg"
-CONTAINER_NAME="perception-fusion-ros1-ros2"
+CONTAINER_NAME="perception-fusion-ros-humble-minimal"
 
 CONTAINER_ID=$(docker ps -aqf "ancestor=${IMG}")
 if [ $CONTAINER_ID ]; then
@@ -46,7 +46,6 @@ docker run \
   -e REPO_NAME=$REPO_NAME \
   -e HOME=/home/${USER_NAME} \
   -e OPENAI_API_KEY=$OPENAI_API_KEY\
-  -e NVIDIA_DRIVER_CAPABILITIES=all \
   -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
   -v "$XAUTH:$XAUTH" \
   -v "/home/${USER}/${PROJ_NAME}:/home/${USER_NAME}/${PROJ_NAME}" \

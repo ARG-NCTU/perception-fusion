@@ -1,0 +1,19 @@
+topics:
+  - topic: "/camera1/color/image_raw/compressed"
+    type: "sensor_msgs/msg/CompressedImage"
+    queue_size: 10
+  - topic: "/camera2/color/image_raw/compressed"
+    type: "sensor_msgs/msg/CompressedImage"
+    queue_size: 10
+  - topic: "/camera3/color/image_raw/compressed"
+    type: "sensor_msgs/msg/CompressedImage"
+    queue_size: 10
+  - topic: "/camera4/color/image_raw/compressed"  
+    type: "sensor_msgs/msg/CompressedImage"
+    queue_size: 10
+  - topic: "/velodyne_points"
+    type: "sensor_msgs/msg/PointCloud2"
+    queue_size: 10
+  - topic: "/scan"
+    type: "sensor_msgs/msg/LaserScan"
+    queue_size: 10

@@ -83,7 +83,7 @@ RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=t
     && rm -rf /var/lib/apt/lists/*
 
 ###################################### ROSBRIDGE #####################################
-RUN python3 -m pip install --upgrade pip \
+RUN pip3 install --upgrade pip \
     roslibpy \
     pymavlink
 
@@ -154,6 +154,17 @@ RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=t
     ros-$ROS_DISTRO-velodyne* \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+
+##################################### mavros ######################################
+
+RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=true install --no-install-recommends -y \
+    ros-$ROS_DISTRO-mavros* \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh \
+    && sudo bash ./install_geographiclib_datasets.sh
 
 ##################################### setting ###################################################
 

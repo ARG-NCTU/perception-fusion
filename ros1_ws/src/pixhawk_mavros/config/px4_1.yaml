@@ -1,0 +1,10 @@
+mavros:
+  param:
+    sys_companion: 921600
+  stream_rate:
+    stream_id: 0
+    message_rate: 200
+    on_off: true
+
+  imu_pub:
+    rate: 200

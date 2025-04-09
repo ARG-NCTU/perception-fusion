@@ -1,0 +1,31 @@
+topics:
+  - topic: "/gps_43/cogsog"
+    type: "sensor_msgs/msg/NavSatFix"
+    queue_size: 10
+  - topic: "/gps_43/navsat"
+    type: "sensor_msgs/msg/NavSatFix"
+    queue_size: 10
+  - topic: "/gps_7/cogsog"
+    type: "sensor_msgs/msg/NavSatFix"
+    queue_size: 10
+  - topic: "/gps_7/navsat"
+    type: "sensor_msgs/msg/NavSatFix"
+    queue_size: 10
+  - topic: "/halo_radar/cropped_pointcloud"
+    type: "sensor_msgs/msg/PointCloud2"
+    queue_size: 10
+  - topic: "/halo_radar/cropped_scan"
+    type: "sensor_msgs/msg/LaserScan"
+    queue_size: 10
+  - topic: "/halo_radar/merged_pointcloud"
+    type: "sensor_msgs/msg/PointCloud2"
+    queue_size: 10
+  - topic: "/halo_radar/single_shot_radar_pointcloud"
+    type: "sensor_msgs/msg/PointCloud2"
+    queue_size: 10
+  - topic: "/imu/data"
+    type: "sensor_msgs/msg/Imu"
+    queue_size: 10
+  - topic: "/imu/data_raw"
+    type: "sensor_msgs/msg/Imu"
+    queue_size: 10
