@@ -22,9 +22,9 @@ class PointCloud2ImageGPU(Node):
         self.declare_parameter('image_topic', '/halo_radar/radar_image/compressed')
         self.declare_parameter('save_images', False)
         self.declare_parameter('save_directory', '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images')
-        self.declare_parameter('range', 120.0)
-        self.declare_parameter('use_grayscale', False)
-        self.declare_parameter('circle_radius', 3)
+        self.declare_parameter('range', 120.0)  # Define range in meters for normalization
+        self.declare_parameter('use_grayscale', False)  # Use grayscale visualization if True
+        self.declare_parameter('circle_radius', 3)  # Circle radius for visualization
 
         # Get parameters
         self.pointcloud_topic = self.get_parameter('pointcloud_topic').value
@@ -53,13 +53,21 @@ class PointCloud2ImageGPU(Node):
         )
         self.publisher = self.create_publisher(CompressedImage, self.image_topic, 10)
 
+        # Timer to enforce FPS >= 1
+        self.timer = self.create_timer(0.5, self.timer_callback)  # Check every 0.5s
+
+        # Store last message and timestamp
+        self.last_compressed_msg = None
+        self.last_publish_time = None
+
         self.bridge = CvBridge()
-        self.current_save_directory = self.save_directory
+        self.current_save_directory = self.save_directory  # Used for dynamically updating save location
 
         # Set parameter callback
         self.add_on_set_parameters_callback(self.parameter_callback)
 
     def parameter_callback(self, params):
+        # Unchanged from original
         for param in params:
             if param.name == 'pointcloud_topic':
                 self.pointcloud_topic = param.value
@@ -78,6 +86,7 @@ class PointCloud2ImageGPU(Node):
                 self.save_images = param.value
                 self.get_logger().info(f"Updated save_images to {self.save_images}")
                 if self.save_images:
+                    # Create a new directory based on current time
                     now = datetime.now()
                     timestamp_str = now.strftime("%Y%m%d_%H%M%S")
                     self.current_save_directory = os.path.join(self.save_directory, timestamp_str)
@@ -87,6 +96,7 @@ class PointCloud2ImageGPU(Node):
                 self.save_directory = param.value
                 self.get_logger().info(f"Updated save_directory to {self.save_directory}")
                 if self.save_images:
+                    # Update current save directory with new save_directory
                     now = datetime.now()
                     timestamp_str = now.strftime("%Y%m%d_%H%M%S")
                     self.current_save_directory = os.path.join(self.save_directory, timestamp_str)
@@ -188,10 +198,14 @@ class PointCloud2ImageGPU(Node):
         # Compress and publish (CPU)
         _, compressed_image = cv2.imencode('.jpg', intensity_image_np)
         compressed_msg = CompressedImage()
-        compressed_msg.header.stamp = msg.header.stamp
+        compressed_msg.header.stamp = self.get_clock().now().to_msg()  # Use current time
         compressed_msg.format = "jpeg"
         compressed_msg.data = compressed_image.tobytes()
         self.publisher.publish(compressed_msg)
+
+        # Update last message and timestamp
+        self.last_compressed_msg = compressed_msg
+        self.last_publish_time = self.get_clock().now().nanoseconds * 1e-9
 
         # Save if enabled (CPU)
         if self.save_images:
@@ -200,6 +214,18 @@ class PointCloud2ImageGPU(Node):
             filename = os.path.join(self.current_save_directory, f'image_{timestamp_str}.jpg')
             cv2.imwrite(filename, intensity_image_np)
             self.get_logger().info(f"Saved image to {filename}")
+
+    def timer_callback(self):
+        """Republish last message if FPS < 1."""
+        current_time = self.get_clock().now().nanoseconds * 1e-9
+        if self.last_compressed_msg is not None and self.last_publish_time is not None:
+            time_since_last_publish = current_time - self.last_publish_time
+            if time_since_last_publish >= 0.5:  # More than 1 second since last publish (FPS < 1)
+                # Update timestamp to current time
+                self.last_compressed_msg.header.stamp = self.get_clock().now().to_msg()
+                self.publisher.publish(self.last_compressed_msg)
+                # self.last_publish_time = current_time
+                self.get_logger().info("Republished last image to maintain FPS >= 1")
 
 def main(args=None):
     rclpy.init(args=args)

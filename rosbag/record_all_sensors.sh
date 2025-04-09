@@ -1,20 +1,18 @@
 #!/bin/bash
 
-# Set the base directory for bag files
-BAGS_DIR="$HOME/perception-fusion/bags"
-
 while true; do
-    
-    TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
-    BAG_PATH="${BAGS_DIR}/ros2-all-${TIMESTAMP}"
+    PREFIX=$(date +%Y-%m-%d-%H-%M-%S).bag
+    BAGS=$HOME/perception-fusion/bags/ros1-all-$(date +%Y_%m%d_%H%M)
 
-    # Create the directory if it doesn't exist
-    mkdir -p "$BAGS_DIR"
+    if [ ! -d "$BAGS" ]; then
+        mkdir -p $BAGS
+    fi
 
-    echo "Recording bag to: $BAG_PATH"
+    BAGS=$BAGS"/"$PREFIX
+    echo "BAGS: "$BAGS
 
-    # Record for 15 minutes (900 seconds) using the -d flag for duration
-    ros2 bag record -o "$BAG_PATH" -d 600 \
+    # Record for 15 minutes (900 seconds) using the --duration flag
+    rosbag record -O $BAGS --duration=900 \
         /camera1/color/image_raw/compressed \
         /camera2/color/image_raw/compressed \
         /camera3/color/image_raw/compressed \
@@ -39,5 +37,4 @@ while true; do
         /imu/data 
 
     echo "Finished recording bag file. Starting new recording..."
-
 done

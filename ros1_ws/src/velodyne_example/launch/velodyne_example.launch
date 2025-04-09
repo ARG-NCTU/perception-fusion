@@ -1,0 +1,11 @@
+<launch>
+  <arg name="veh" default="js"/>
+
+  <group ns="$(arg veh)">
+    <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
+      <arg name="device_ip" value="192.168.131.201"/>
+      <arg name="port" value="2369"/>
+    </include>
+  </group>
+  
+</launch>
