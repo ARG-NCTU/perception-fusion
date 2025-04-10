@@ -133,14 +133,17 @@ RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-velodyne* \
     && rm -rf /var/lib/apt/lists/*
 
-# ###################################### APRILTAG ROS2 ######################################
+####################################### gstreamer ######################################
 
-# RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
-#     ros-${ROS_DISTRO}-vision-opencv \
-#     ros-${ROS_DISTRO}-image-transport \
-#     ros-${ROS_DISTRO}-apriltag \
-#     ros-${ROS_DISTRO}-apriltag-ros \
-#     && rm -rf /var/lib/apt/lists/*
+RUN add-apt-repository universe && apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+    libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-ugly \
+    gstreamer1.0-plugins-good gstreamer1.0-plugins-bad \
+    gstreamer1.0-tools gstreamer1.0-libav gstreamer1.0-gl \
+    gstreamer1.0-gtk3 gstreamer1.0-x libgstreamer1.0-0 \
+    libgstrtspserver-1.0-0 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ##################################### setting ##########################################
 
