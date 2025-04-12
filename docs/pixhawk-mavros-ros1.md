@@ -68,7 +68,7 @@ source environment_ros1.sh
 rosed pixhawk_mavros gps_imu.launch
 ```
 
-Modify the USB port (ttyACM0) and IP (Substitude 127.0.0.1 for your ROS IP)
+Modify the USB port (ttyACM0) and IP (Substitude 127.0.0.1 with your ROS IP)
 
 4. Launch Pixhawk Mavros
 
@@ -89,6 +89,8 @@ source Docker/ros1-cpu/join.sh
 ```bash
 source environment_ros1.sh
 ```
+
+3. Echo topics
 
 Echo GPS topic:
 ```bash

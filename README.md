@@ -5,7 +5,7 @@
 ### ROS2-ROS1-Bridge Guide
 
 ```bash
-docs/ros2-ros1-bridge-example.md
+docs/ros-humble-ros1-bridge-example.md
 ```
 
 ## ROS1
