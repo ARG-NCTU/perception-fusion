@@ -49,6 +49,7 @@ docker run \
   -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
   -v "$XAUTH:$XAUTH" \
   -v "/home/${USER}/${PROJ_NAME}:/home/${USER_NAME}/${PROJ_NAME}" \
+  -v "/media/$USER/new_extension/bags:/media/arg/new_extension/bags" \
   -v "/tmp/.X11-unix:/tmp/.X11-unix" \
   -v "/etc/localtime:/etc/localtime:ro" \
   -v "/dev:/dev" \

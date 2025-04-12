@@ -48,11 +48,9 @@ source build_ros1_all.sh
 
 ## Usage
 
-### Terminal 1: ROSCORE
+### Terminal 1: Pixhawk Mavros
 
 1. Docker Run
-
-Run this script to pull docker image to your workstation.
 
 ```bash
 source Docker/ros1-cpu/run.sh
@@ -64,12 +62,21 @@ source Docker/ros1-cpu/run.sh
 source environment_ros1.sh
 ```
 
-3. Roscore
+3. Edit Pixhawk Mavros launch file 
 
 ```bash
-roscore
+rosed pixhawk_mavros gps_imu.launch
 ```
-### Terminal 2: Nuscene Dataset Visualization
+
+Modify the USB port (ttyACM0) and IP (Substitude 127.0.0.1 for your ROS IP)
+
+4. Launch Pixhawk Mavros
+
+```bash
+roslaunch pixhawk_mavros gps_imu.launch
+```
+
+### Terminal 2: Echo Pixhawk Mavros topics
 
 1. Docker Join
 
@@ -83,8 +90,13 @@ source Docker/ros1-cpu/join.sh
 source environment_ros1.sh
 ```
 
-3. Run Nuscene Dataset Visualization
-
+Echo GPS topic:
 ```bash
-roslaunch nuscene_visualize visualize_launch.launch
+rostopic echo /pixhawk1/mavros/global_position/raw/fix
 ```
+
+Echo Imu topic:
+```bash
+rostopic echo /pixhawk1/mavros/imu/data
+```
+

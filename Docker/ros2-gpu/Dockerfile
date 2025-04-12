@@ -102,11 +102,77 @@ RUN python3 -m pip install --upgrade \
 
 ###################################### cv ################################
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3-opencv 
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     python3-opencv 
 
-RUN python3 -m pip install --upgrade \
-    opencv-python
+# RUN python3 -m pip install --upgrade \
+#     opencv-python
+
+RUN add-apt-repository universe && apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+    libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-ugly \
+    gstreamer1.0-plugins-good gstreamer1.0-plugins-bad \
+    gstreamer1.0-tools gstreamer1.0-libav gstreamer1.0-gl \
+    gstreamer1.0-gtk3 gstreamer1.0-x libgstreamer1.0-0 \
+    libgstrtspserver-1.0-0 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ENV OPENCV_VERSION=4.5.2
+ARG MTX_VERSION=1.11.3
+
+# --------------------- 下載 & 編譯 OpenCV ---------------------
+RUN git clone -b ${OPENCV_VERSION} --depth 1 https://github.com/opencv/opencv.git /opencv && \
+    git clone -b ${OPENCV_VERSION} --depth 1 https://github.com/opencv/opencv_contrib.git /opencv_contrib && \
+    mkdir -p /opencv/build
+
+WORKDIR /opencv/build
+
+ENV CUDA_ARCH_BIN="8.9"
+
+RUN cmake -D CMAKE_BUILD_TYPE=RELEASE \
+          -D CMAKE_INSTALL_PREFIX=/usr/local \
+          -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules \
+          -D WITH_CUDA=ON \
+          -D ENABLE_FAST_MATH=1 \
+          -D CUDA_FAST_MATH=1 \
+          -D WITH_CUBLAS=1 \
+          -D WITH_CUDNN=ON \
+          -D OPENCV_DNN_CUDA=ON \
+          -D CUDA_ARCH_BIN=${CUDA_ARCH_BIN} \
+          -D BUILD_EXAMPLES=OFF \
+          -D BUILD_TESTS=OFF \
+          -D BUILD_PERF_TESTS=OFF \
+          -D PYTHON_EXECUTABLE=/usr/bin/python3 \
+          -D OPENCV_GENERATE_PKGCONFIG=YES \
+          -D BUILD_opencv_python2=OFF \
+          -D BUILD_opencv_python3=ON \
+          -D WITH_GSTREAMER=ON \
+          .. && \
+    make -j"$(nproc)" && make install && ldconfig
+
+
+RUN python3 -c "import cv2; print('OpenCV:', cv2.__version__, 'CUDA:', cv2.cuda.getCudaEnabledDeviceCount() > 0)"
+
+# --------------------- 安裝 Python 擴充 ---------------------
+RUN pip3 install tqdm websocket-server websocket-client ffmpeg-python
+
+# --------------------- 安裝 FFmpeg 播放支援 ---------------------
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg libavcodec-dev libavformat-dev libavutil-dev \
+    libswscale-dev libavfilter-dev libavdevice-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# --------------------- 安裝 nginx + RTMP 模組 ---------------------
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nginx vim libnginx-mod-rtmp && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# --------------------- 安裝 MediaMTX ---------------------
+RUN mkdir -p /opt/mediamtx && \
+    curl -L https://github.com/bluenviron/mediamtx/releases/download/v${MTX_VERSION}/mediamtx_v${MTX_VERSION}_linux_amd64.tar.gz \
+    | tar xz -C /opt/mediamtx && \
+    ln -s /opt/mediamtx/mediamtx /usr/local/bin/mediamtx
 
 #################################### pointcloud_processing ###################################
 
@@ -126,6 +192,12 @@ RUN sudo -H pip install numpy==1.24.4 transforms3d cupy-cuda12x
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp && \
     rm -rf /var/lib/apt/lists/*
+
+########################################## velodyne ####################################
+
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-velodyne* \
+    && rm -rf /var/lib/apt/lists/*
 
 ##################################### setting ##########################################
 

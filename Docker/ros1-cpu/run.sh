@@ -48,6 +48,7 @@ docker run \
     -v "/dev:/dev" \
     -v "/var/run/docker.sock:/var/run/docker.sock" \
     -v "/home/$USER/$PROJ_NAME:/home/arg/$PROJ_NAME" \
+    -v "/media/$USER/new_extension/bags:/media/arg/new_extension/bags" \
     -w "/home/arg/$PROJ_NAME" \
     --user "root:root" \
     --name perception-fusion-ros1-cpu \
