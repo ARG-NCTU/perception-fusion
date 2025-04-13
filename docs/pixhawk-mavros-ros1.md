@@ -58,22 +58,40 @@ source Docker/ros1-cpu/run.sh
 
 2. Source ROS1 Environment
 
+Use Default IP (127.0.0.1):
 ```bash
 source environment_ros1.sh
 ```
 
+Use another IP:
+```bash
+source environment_ros1.sh MASTER_IP ROS_IP
+```
+
 3. Edit Pixhawk Mavros launch file 
 
+For 1 pair:
 ```bash
 rosed pixhawk_mavros gps_imu.launch
+```
+
+For 2 pair:
+```bash
+rosed pixhawk_mavros gps_imu_2.launch
 ```
 
 Modify the USB port (ttyACM0) and IP (Substitude 127.0.0.1 with your ROS IP)
 
 4. Launch Pixhawk Mavros
 
+For 1 pair:
 ```bash
 roslaunch pixhawk_mavros gps_imu.launch
+```
+
+For 2 pair:
+```bash
+roslaunch pixhawk_mavros gps_imu_2.launch
 ```
 
 ### Terminal 2: Echo Pixhawk Mavros topics

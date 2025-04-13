@@ -1,0 +1,17 @@
+<launch>
+    
+    <group ns="pixhawk1">
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="/dev/ttyACM0:921600"/>
+            <arg name="gcs_url" value="udp://@127.0.0.1"/>
+        </include>
+    </group>
+    
+    <group ns="pixhawk2">
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="/dev/ttyACM1:921600"/>
+            <arg name="gcs_url" value="udp://@127.0.0.1"/>
+        </include>
+    </group>
+
+</launch>
