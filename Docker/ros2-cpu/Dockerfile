@@ -192,6 +192,14 @@ RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-velodyne* \
     && rm -rf /var/lib/apt/lists/*
 
+###################################### ros2 bag processing ################################
+
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-rosbag2-storage-default-plugins \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install pybind11
+
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
