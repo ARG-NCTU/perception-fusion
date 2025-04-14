@@ -169,7 +169,7 @@ class PointCloud2ImageGPU(Node):
         # Compute pixel coordinates on GPU
         u = ((xyz[:, 1] - range_min) / (range_max - range_min) * img_width - img_width / 2).astype(cp.int32)
         v = ((xyz[:, 0] - range_min) / (range_max - range_min) * img_height - img_height / 2).astype(cp.int32)
-        u = img_height // 2 - u
+        u = img_height // 2 + u
         v = img_width // 2 - v
 
         # Filter valid coordinates on GPU
@@ -194,6 +194,7 @@ class PointCloud2ImageGPU(Node):
 
         # Single transfer back to CPU for publishing and saving
         intensity_image_np = cp.asnumpy(intensity_image)
+        intensity_image_np = cv2.rotate(intensity_image_np, cv2.ROTATE_90_CLOCKWISE)
 
         # Compress and publish (CPU)
         _, compressed_image = cv2.imencode('.jpg', intensity_image_np)
