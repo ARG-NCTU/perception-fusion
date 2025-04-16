@@ -1,0 +1,10 @@
+<launch>
+    <!-- radar -> map -->
+    <node pkg="tf" type="static_transform_publisher" name="radar_tf_pub"
+          args="1 0 0 0 0 0 map radar 100" />
+
+    <!-- velodyne -> map -->
+    <node pkg="tf" type="static_transform_publisher" name="velodyne_tf_pub"
+          args="1 0 0 0 0 0 map velodyne 100" />
+</launch>
+
