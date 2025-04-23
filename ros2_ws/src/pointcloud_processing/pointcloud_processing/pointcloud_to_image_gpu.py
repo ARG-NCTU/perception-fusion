@@ -193,11 +193,36 @@ class PointCloud2ImageGPU(Node):
             intensity_image[u, v] = cp.array([255, 255, 255])
 
         # Single transfer back to CPU for publishing and saving
-        intensity_image_np = cp.asnumpy(intensity_image)
-        intensity_image_np = cv2.rotate(intensity_image_np, cv2.ROTATE_90_CLOCKWISE)
+        intensity_image = cp.asnumpy(intensity_image)
+        intensity_image = cv2.rotate(intensity_image, cv2.ROTATE_90_CLOCKWISE)
+
+        # ===== Add grid lines every 10 meters (i.e., every 40 pixels) =====
+        grid_spacing = int(img_width / (self.range / 10))  # 10m per cell → 40px if 480/12
+        for i in range(0, img_width, grid_spacing):
+            cv2.line(intensity_image, (i, 0), (i, img_height), color=(100, 100, 100), thickness=1)
+        for j in range(0, img_height, grid_spacing):
+            cv2.line(intensity_image, (0, j), (img_width, j), color=(100, 100, 100), thickness=1)
+
+        # Draw X and Y axes with arrows
+        center_x, center_y = img_width // 2, img_height // 2
+        axis_length_px = int((10 / self.range) * img_width)  # 10m → 40 pixels
+
+        # X-axis → Red arrow upward (positive X)
+        cv2.arrowedLine(intensity_image,
+                        (center_x, center_y),
+                        (center_x, center_y - axis_length_px),
+                        color=(0, 0, 255),  # Red
+                        thickness=2, tipLength=0.15)
+
+        # Y-axis → Green arrow to the left (positive Y)
+        cv2.arrowedLine(intensity_image,
+                        (center_x, center_y),
+                        (center_x - axis_length_px, center_y),
+                        color=(0, 255, 0),  # Green
+                        thickness=2, tipLength=0.15)
 
         # Compress and publish (CPU)
-        _, compressed_image = cv2.imencode('.jpg', intensity_image_np)
+        _, compressed_image = cv2.imencode('.jpg', intensity_image)
         compressed_msg = CompressedImage()
         compressed_msg.header.stamp = self.get_clock().now().to_msg()  # Use current time
         compressed_msg.format = "jpeg"

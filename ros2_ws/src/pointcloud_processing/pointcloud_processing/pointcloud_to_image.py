@@ -147,7 +147,14 @@ class PointCloud2Image(Node):
                 gray_values = (intensity_norm * 255).astype(np.uint8)
                 colors = np.stack([gray_values, gray_values, gray_values], axis=-1)
             else:
-                colors = cv2.applyColorMap(np.uint8(intensity_norm * 255), cv2.COLORMAP_JET)[:, 0, :]
+                color_vals = np.uint8(intensity_norm * 255)
+                if color_vals.size == 0:
+                    return  # No valid intensity points, skip processing
+
+                # Apply colormap safely
+                color_mapped = cv2.applyColorMap(color_vals.reshape(-1, 1), cv2.COLORMAP_JET)
+                colors = color_mapped.reshape(-1, 3)
+                # colors = cv2.applyColorMap(np.uint8(intensity_norm * 255), cv2.COLORMAP_JET)[:, 0, :]
             
             # Assign colors directly (this is still per-pixel, see next optimization for further speedup)
             intensity_image[u, v] = colors
@@ -155,6 +162,32 @@ class PointCloud2Image(Node):
             intensity_image[u, v] = [255, 255, 255]
 
         intensity_image = cv2.rotate(intensity_image, cv2.ROTATE_90_CLOCKWISE)
+
+        # ===== Add grid lines every 10 meters (i.e., every 40 pixels) =====
+        grid_spacing = int(img_width / (self.range / 10))  # 10m per cell → 40px if 480/12
+        for i in range(0, img_width, grid_spacing):
+            cv2.line(intensity_image, (i, 0), (i, img_height), color=(100, 100, 100), thickness=1)
+        for j in range(0, img_height, grid_spacing):
+            cv2.line(intensity_image, (0, j), (img_width, j), color=(100, 100, 100), thickness=1)
+
+        # Draw X and Y axes with arrows
+        center_x, center_y = img_width // 2, img_height // 2
+        axis_length_px = int((10 / self.range) * img_width)  # 10m → 40 pixels
+
+        # X-axis → Red arrow upward (positive X)
+        cv2.arrowedLine(intensity_image,
+                        (center_x, center_y),
+                        (center_x, center_y - axis_length_px),
+                        color=(0, 0, 255),  # Red
+                        thickness=2, tipLength=0.15)
+
+        # Y-axis → Green arrow to the left (positive Y)
+        cv2.arrowedLine(intensity_image,
+                        (center_x, center_y),
+                        (center_x - axis_length_px, center_y),
+                        color=(0, 255, 0),  # Green
+                        thickness=2, tipLength=0.15)
+
 
         # Compress and publish
         _, compressed_image = cv2.imencode('.jpg', intensity_image)
