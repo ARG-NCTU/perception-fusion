@@ -83,7 +83,18 @@ source Docker/ros1-nuscenes-gpu/join.sh
 source environment_ros1.sh
 ```
 
-3. Run Nuscene Dataset Visualization
+3. Modify the NUSCENES_DIR to your dataset directory path
+
+```bash
+rosed nuscene_visualize visualize_launch.launch
+```
+
+Modify this line:
+```bash
+<arg name="NUSCENES_DIR" default="/media/arg/new_extension2/open_source_dataset/nuscene/trainval"/>
+```
+
+4. Run Nuscene Dataset Visualization
 
 ```bash
 roslaunch nuscene_visualize visualize_launch.launch

@@ -23,6 +23,7 @@ while true; do
         /camera4_fix/color/image_raw/compressed \
         /camera_stitched/color/image_raw/compressed \
         /js/velodyne_points \
+        /js/lidar_image/compressed \
         /js/real_velodyne/lidar_crop \
         /js/scan \
         /ais/polygon \

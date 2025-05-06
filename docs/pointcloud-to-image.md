@@ -71,11 +71,6 @@ For CPU usage
 ros2 launch pointcloud_processing pointcloud_to_image.launch.py
 ```
 
-For GPU usage
-```bash
-ros2 launch pointcloud_processing pointcloud_to_image_gpu.launch.py
-```
-
 ### Terminal 2: Play Radar Ros2 Bag (or Run Radar)
 
 1. Docker Join

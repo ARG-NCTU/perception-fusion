@@ -10,10 +10,22 @@ docs/ros-humble-ros1-bridge-example.md
 
 ## ROS1
 
+### Velodyne-Lidar-ROS1 Guide
+
+```bash
+docs/velodyne-lidar-ros1.md
+```
+
 ### Realsesnse2-Camera-ROS1 Guide
 
 ```bash
 docs/realsense2-camera-ros1.md
+```
+
+### Pixhawk-Mavros-ROS1 Guide
+
+```bash
+docs/pixhawk-mavros-ros1.md
 ```
 
 ### Visualize Nuscene Dataset Guide
@@ -30,20 +42,26 @@ plot-mavros-trajectory.md
 
 ## ROS2
 
-### Realsesnse2-Camera-ROS2 Guide
-
-```bash
-docs/realsense2-camera-ros2.md
-```
-
 ### Velodyne-Lidar-ROS2 Guide
 
 ```bash
 docs/velodyne-lidar-ros2.md
 ```
 
-### Radar PointCloud to Image Guide
+### Radar or Lidar PointCloud to Image Guide
 
 ```bash
-pointcloud-to-image.md
+docs/pointcloud-to-image.md
+```
+
+### Localization-ROS2 Guide
+
+```bash
+docs/localization-ros2.md
+```
+
+### Realsesnse2-Camera-ROS2 Guide
+
+```bash
+docs/realsense2-camera-ros2.md
 ```
