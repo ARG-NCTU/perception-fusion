@@ -34,9 +34,9 @@
 
 [docs/velodyne-lidar-ros2.md](https://github.com/ARG-NCTU/perception-fusion/blob/main/docs/velodyne-lidar-ros2.md)
 
-### Radar or Lidar PointCloud to Image Guide
+### Radar-Lidar-PointCloud-to-Image-ROS2 Guide
 
-[docs/pointcloud-to-image.md](https://github.com/ARG-NCTU/perception-fusion/blob/main/docs/pointcloud-to-image.md)
+[docs/pointcloud-to-image.md](https://github.com/ARG-NCTU/perception-fusion/blob/main/docs/pointcloud-to-image-ros2.md)
 
 ### Localization-ROS2 Guide
 
@@ -45,3 +45,7 @@
 ### Realsesnse2-Camera-ROS2 Guide
 
 [docs/realsense2-camera-ros2.md](https://github.com/ARG-NCTU/perception-fusion/blob/main/docs/realsense2-camera-ros2.md)
+
+### Record-ROS2-Bag Guide
+
+[docs/record-ros2-bag.md](https://github.com/ARG-NCTU/perception-fusion/blob/main/docs/record-ros2-bag.md)
