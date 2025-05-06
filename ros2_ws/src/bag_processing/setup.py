@@ -28,6 +28,9 @@ setup(
     entry_points={
         'console_scripts': [
             'filter_ros2_bag = bag_processing.filter_ros2_bag:main',
+            'fix_time = bag_processing.fix_time:main',
+            'save_perceptions = bag_processing.save_perceptions:main',
+            'relay_tf = bag_processing.relay_tf:main'
         ],
     },
 )
