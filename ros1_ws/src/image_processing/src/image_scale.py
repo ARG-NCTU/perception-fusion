@@ -7,6 +7,7 @@ import numpy as np
 from cv_bridge import CvBridge
 import rospkg
 import os
+import json
 
 rospack = rospkg.RosPack()
 
@@ -20,6 +21,8 @@ class ROSImageScale:
         self.camera_orientation = rospy.get_param('~camera_orientation', 'mid')
         self.sub_camera_info_topic = rospy.get_param('~sub_camera_info_topic', '/camera2/color/camera_info')
         self.pub_topic = rospy.get_param('~pub_camera_topic', '/camera2/scaled/compressed')
+
+        self.json_path = rospy.get_param('~json_path')
 
         # Bridge for converting ROS images to OpenCV
         self.bridge = CvBridge()
@@ -70,11 +73,14 @@ class ROSImageScale:
             # Camera intrinsic parameters (provided earlier)
             if height == 480 and width == 640:
                 # 640x480 camera
-                K = np.array([
-                    [219.11268079, 0.0, 335.02464347],
-                    [0.0, 291.76661082, 237.94837061],
-                    [0.0, 0.0, 1.0]
-                ])
+                # K = np.array([
+                #     [219.11268079, 0.0, 335.02464347],
+                #     [0.0, 291.76661082, 237.94837061],
+                #     [0.0, 0.0, 1.0]
+                # ])
+                with open(self.json_path, 'r') as f:
+                    data = json.load(f)
+                K = np.array(data['K']).reshape((3, 3))
             else:
                 raise ValueError("Error: Camera intrinsic parameters not provided.")
         else:
@@ -151,11 +157,11 @@ class ROSImageScale:
             cv2.line(image, (u1, v1), (u2, v2), (255, 255, 255), 2)
             # add degree text and put center of the line
             if self.camera_orientation == 'left':
-                text = f"{angle-60}"
+                text = f"{angle-30}"
             elif self.camera_orientation == 'mid':
                 text = f"{angle}"
             elif self.camera_orientation == 'right':
-                text = f"{angle+60}"
+                text = f"{angle+30}"
             else:
                 raise ValueError("Error: Invalid camera orientation.")
             text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]

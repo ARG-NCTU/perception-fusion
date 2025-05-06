@@ -1,0 +1,40 @@
+<launch>
+    <arg name="save_dir" default="$(find image_processing)/camera_intrinsic/distorted/jv"/>
+    <arg name="save_new_K" default="False"/>
+
+    <!-- camera1 -->
+    <node pkg="image_processing" type="camera_undistorter.py" name="camera1_undistorter" output="screen">
+        <param name="input_topic" value="/camera1/color/image_raw/compressed"/>
+        <param name="output_topic" value="/camera1_fix/color/image_raw/compressed"/>
+        <param name="json_path" value="$(find image_processing)/camera_intrinsic/undistorted/jv/camera1.json"/>
+        <param name="save_dir" value="$(arg save_dir)"/>
+        <param name="save_new_K" value="$(arg save_new_K)"/>
+    </node>
+
+    <!-- camera2 -->
+    <node pkg="image_processing" type="camera_undistorter.py" name="camera2_undistorter" output="screen">
+        <param name="input_topic" value="/camera2/color/image_raw/compressed"/>
+        <param name="output_topic" value="/camera2_fix/color/image_raw/compressed"/>
+        <param name="json_path" value="$(find image_processing)/camera_intrinsic/undistorted/jv/camera2.json"/>
+        <param name="save_dir" value="$(arg save_dir)"/>
+        <param name="save_new_K" value="$(arg save_new_K)"/>
+    </node>
+
+    <!-- camera3 -->
+    <node pkg="image_processing" type="camera_undistorter.py" name="camera3_undistorter" output="screen">
+        <param name="input_topic" value="/camera3/color/image_raw/compressed"/>
+        <param name="output_topic" value="/camera3_fix/color/image_raw/compressed"/>
+        <param name="json_path" value="$(find image_processing)/camera_intrinsic/undistorted/jv/camera3.json"/>
+        <param name="save_dir" value="$(arg save_dir)"/>
+        <param name="save_new_K" value="$(arg save_new_K)"/>
+    </node>
+
+    <!-- camera4 -->
+    <node pkg="image_processing" type="camera_undistorter.py" name="camera4_undistorter" output="screen">
+        <param name="input_topic" value="/camera4/color/image_raw/compressed"/>
+        <param name="output_topic" value="/camera4_fix/color/image_raw/compressed"/>
+        <param name="json_path" value="$(find image_processing)/camera_intrinsic/undistorted/jv/camera4.json"/>
+        <param name="save_dir" value="$(arg save_dir)"/>
+        <param name="save_new_K" value="$(arg save_new_K)"/>
+    </node>
+</launch>

@@ -176,7 +176,11 @@ class Stitcher():
         height_left, width_left = img_left.shape[:2]
         height_right, width_right = img_right.shape[:2]
         panorama_size = (width_left + width_right, max(height_left, height_right))
-        img_right_warped = cv2.warpPerspective(img_right, H, panorama_size)
+        try:
+            img_right_warped = cv2.warpPerspective(img_right, H, panorama_size)
+        except Exception as e:
+            print(f"Error during warping: {e}")
+            return None
 
         # Place the left image onto the panorama canvas
         panorama = np.zeros_like(img_right_warped)

@@ -1,0 +1,10 @@
+<launch>
+
+    <node name="image_scale_horizon_line" pkg="image_processing" type="image_scale_horizon_line.py" output="screen">
+        <param name="sub_camera_topic" value="/camera2_fix/color/image_raw/compressed" />
+        <param name="pub_camera_topic" value="/camera2_fix/scaled_exp/compressed" />
+        <param name="camera_height" value="3" />
+        <param name="image_save_dir" value="$(find image_processing)/output/scaled_hor"/>
+    </node>
+
+</launch>

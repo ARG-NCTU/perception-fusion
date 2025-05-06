@@ -152,6 +152,11 @@ class ROSImageStitcher:
             rospy.loginfo(f"Skipping final stitching for image set {self.image_index} due to missing or invalid stitching.")
             return None
 
+        # if self.image_index % 2 == 0:
+        #     image_index = self.image_index // 2
+        #     images_dir = os.path.join(output_dir, 'stitched_images')
+        #     os.makedirs(images_dir, exist_ok=True)
+        #     cv2.imwrite(os.path.join(images_dir, f"{image_index}.png"), final_image)
         # Save the stitched image
         if self.h1_path is None and self.h2_path is None:
             images_dir = os.path.join(output_dir, 'stitched_images')
