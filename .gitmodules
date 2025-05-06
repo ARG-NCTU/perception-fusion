@@ -1,3 +1,4 @@
 [submodule "ros1_ws/src/nuscenes_visualize"]
-	path = ros1_ws/src/nuscenes_visualize
-	url = git@github.com:ARG-NCTU/nuscenes_visualize.git
+    path = ros1_ws/src/nuscenes_visualize
+    url = git@github.com:ARG-NCTU/nuscenes_visualize.git
+    branch = master
