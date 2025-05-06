@@ -200,6 +200,18 @@ RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
 
 RUN pip3 install pybind11
 
+###################################### localization2 ####################################
+
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-tf-transformations \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install utm
+
+###################################### label 3d pcd ####################################
+
+# RUN pip3 install open3d pandas
+
 ##################################### setting ##########################################
 
 RUN chown -R ${USER}:${USER} ${HOME}/
