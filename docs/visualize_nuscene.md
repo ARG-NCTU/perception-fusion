@@ -29,7 +29,7 @@ cd ~/perception-fusion
 Run this script to pull docker image to your workstation.
 
 ```bash
-source Docker/ros1-cpu/run.sh
+source Docker/ros1-nuscenes-gpu/run.sh
 ```
 
 1.2. Docker Join
@@ -37,7 +37,7 @@ source Docker/ros1-cpu/run.sh
 If want to enter same docker image, type below command.
 
 ```bash
-source Docker/ros1-cpu/join.sh
+source Docker/ros1-nuscenes-gpu/join.sh
 ```
 
 2. Building All ROS1 package
@@ -55,7 +55,7 @@ source build_ros1_all.sh
 Run this script to pull docker image to your workstation.
 
 ```bash
-source Docker/ros1-cpu/run.sh
+source Docker/ros1-nuscenes-gpu/run.sh
 ```
 
 2. Source ROS1 Environment
@@ -74,7 +74,7 @@ roscore
 1. Docker Join
 
 ```bash
-source Docker/ros1-cpu/join.sh
+source Docker/ros1-nuscenes-gpu/join.sh
 ```
 
 2. Source ROS1 Environment

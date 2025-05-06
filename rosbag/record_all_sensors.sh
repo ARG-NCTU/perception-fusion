@@ -34,7 +34,9 @@ while true; do
         /halo_radar/cropped_scan \
         /halo_radar/merged_pointcloud \
         /halo_radar/radar_image/compressed \
-        /imu/data 
+        /imu/data \
+        /tf \
+        /tf_static 
 
     echo "Finished recording bag file. Starting new recording..."
 done
