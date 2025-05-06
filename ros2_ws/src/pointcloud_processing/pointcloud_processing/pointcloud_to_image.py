@@ -21,18 +21,20 @@ class PointCloud2Image(Node):
         self.declare_parameter('image_topic', '/halo_radar/radar_image/compressed')
         self.declare_parameter('save_images', False)
         self.declare_parameter('save_directory', '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images')
+        self.declare_parameter('add_grid', False)  # Add grid lines if True
         self.declare_parameter('range', 120.0)  # Define range in meters for normalization
         self.declare_parameter('use_grayscale', False)  # Use grayscale visualization if True
-        self.declare_parameter('circle_radius', 3)  # Circle radius for visualization
+        self.declare_parameter('timer_used', False)  # Use timer to enforce FPS >= 1
 
         # Get parameters
         self.pointcloud_topic = self.get_parameter('pointcloud_topic').value
         self.image_topic = self.get_parameter('image_topic').value
         self.save_images = self.get_parameter('save_images').value
         self.save_directory = self.get_parameter('save_directory').value
+        self.add_grid = self.get_parameter('add_grid').value
         self.range = self.get_parameter('range').value
         self.use_grayscale = self.get_parameter('use_grayscale').value
-        self.circle_radius = self.get_parameter('circle_radius').value
+        self.timer_used = self.get_parameter('timer_used').value
 
         # Create the save directory if needed
         if self.save_images:
@@ -53,7 +55,8 @@ class PointCloud2Image(Node):
         self.publisher = self.create_publisher(CompressedImage, self.image_topic, 10)
 
         # Timer to enforce FPS >= 1
-        self.timer = self.create_timer(0.5, self.timer_callback)  # Check every 0.5s
+        if self.timer_used:
+            self.timer = self.create_timer(0.5, self.timer_callback)  # Check every 0.5s
 
         # Store last message and timestamp
         self.last_compressed_msg = None
@@ -99,15 +102,25 @@ class PointCloud2Image(Node):
                     timestamp_str = now.strftime("%Y%m%d_%H%M%S")
                     self.current_save_directory = os.path.join(self.save_directory, timestamp_str)
                     os.makedirs(self.current_save_directory, exist_ok=True)
+            elif param.name == 'add_grid':
+                self.add_grid = param.value
+                self.get_logger().info(f"Updated add_grid to {self.add_grid}")
             elif param.name == 'range':
                 self.range = param.value
                 self.get_logger().info(f"Updated range to {self.range}")
             elif param.name == 'use_grayscale':
                 self.use_grayscale = param.value
                 self.get_logger().info(f"Updated use_grayscale to {self.use_grayscale}")
-            elif param.name == 'circle_radius':
-                self.circle_radius = param.value
-                self.get_logger().info(f"Updated circle_radius to {self.circle_radius}")
+            elif param.name == 'timer_used':
+                self.timer_used = param.value
+                self.get_logger().info(f"Updated timer_used to {self.timer_used}")
+                if self.timer_used:
+                    self.timer = self.create_timer(0.5, self.timer_callback)
+                else:
+                    if self.timer:
+                        self.destroy_timer(self.timer)
+                        self.timer = None
+                        self.get_logger().info("Timer stopped.")
         return rcl_interfaces.msg.SetParametersResult(successful=True)
 
     def process_pointcloud(self, msg):
@@ -163,30 +176,31 @@ class PointCloud2Image(Node):
 
         intensity_image = cv2.rotate(intensity_image, cv2.ROTATE_90_CLOCKWISE)
 
-        # ===== Add grid lines every 10 meters (i.e., every 40 pixels) =====
-        grid_spacing = int(img_width / (self.range / 10))  # 10m per cell → 40px if 480/12
-        for i in range(0, img_width, grid_spacing):
-            cv2.line(intensity_image, (i, 0), (i, img_height), color=(100, 100, 100), thickness=1)
-        for j in range(0, img_height, grid_spacing):
-            cv2.line(intensity_image, (0, j), (img_width, j), color=(100, 100, 100), thickness=1)
+        # ===== Add grid lines every 20 meters (i.e., every 40 pixels) =====
+        if self.add_grid:
+            grid_spacing = int(img_width / (self.range * 2 / 20))  # 20m per cell → 40px if 480/12
+            for i in range(0, img_width, grid_spacing):
+                cv2.line(intensity_image, (i, 0), (i, img_height), color=(100, 100, 100), thickness=1)
+            for j in range(0, img_height, grid_spacing):
+                cv2.line(intensity_image, (0, j), (img_width, j), color=(100, 100, 100), thickness=1)
 
-        # Draw X and Y axes with arrows
-        center_x, center_y = img_width // 2, img_height // 2
-        axis_length_px = int((10 / self.range) * img_width)  # 10m → 40 pixels
+            # Draw X and Y axes with arrows
+            center_x, center_y = img_width // 2, img_height // 2
+            axis_length_px = int((20 / (self.range * 2)) * img_width)  # 20m → 40 pixels
 
-        # X-axis → Red arrow upward (positive X)
-        cv2.arrowedLine(intensity_image,
-                        (center_x, center_y),
-                        (center_x, center_y - axis_length_px),
-                        color=(0, 0, 255),  # Red
-                        thickness=2, tipLength=0.15)
+            # X-axis → Red arrow upward (positive X)
+            cv2.arrowedLine(intensity_image,
+                            (center_x, center_y),
+                            (center_x, center_y - axis_length_px),
+                            color=(0, 0, 255),  # Red
+                            thickness=2, tipLength=0.15)
 
-        # Y-axis → Green arrow to the left (positive Y)
-        cv2.arrowedLine(intensity_image,
-                        (center_x, center_y),
-                        (center_x - axis_length_px, center_y),
-                        color=(0, 255, 0),  # Green
-                        thickness=2, tipLength=0.15)
+            # Y-axis → Green arrow to the left (positive Y)
+            cv2.arrowedLine(intensity_image,
+                            (center_x, center_y),
+                            (center_x - axis_length_px, center_y),
+                            color=(0, 255, 0),  # Green
+                            thickness=2, tipLength=0.15)
 
 
         # Compress and publish

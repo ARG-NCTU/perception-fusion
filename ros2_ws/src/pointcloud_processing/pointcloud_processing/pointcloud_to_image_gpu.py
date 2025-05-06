@@ -22,6 +22,7 @@ class PointCloud2ImageGPU(Node):
         self.declare_parameter('image_topic', '/halo_radar/radar_image/compressed')
         self.declare_parameter('save_images', False)
         self.declare_parameter('save_directory', '/home/arg/perception-fusion/ros2_ws/src/pointcloud_processing/data/radar_images')
+        self.declare_parameter('add_grid', False)  # Add grid lines if True
         self.declare_parameter('range', 120.0)  # Define range in meters for normalization
         self.declare_parameter('use_grayscale', False)  # Use grayscale visualization if True
         self.declare_parameter('circle_radius', 3)  # Circle radius for visualization
@@ -31,6 +32,7 @@ class PointCloud2ImageGPU(Node):
         self.image_topic = self.get_parameter('image_topic').value
         self.save_images = self.get_parameter('save_images').value
         self.save_directory = self.get_parameter('save_directory').value
+        self.add_grid = self.get_parameter('add_grid').value
         self.range = self.get_parameter('range').value
         self.use_grayscale = self.get_parameter('use_grayscale').value
         self.circle_radius = self.get_parameter('circle_radius').value
@@ -196,30 +198,31 @@ class PointCloud2ImageGPU(Node):
         intensity_image = cp.asnumpy(intensity_image)
         intensity_image = cv2.rotate(intensity_image, cv2.ROTATE_90_CLOCKWISE)
 
-        # ===== Add grid lines every 10 meters (i.e., every 40 pixels) =====
-        grid_spacing = int(img_width / (self.range / 10))  # 10m per cell → 40px if 480/12
-        for i in range(0, img_width, grid_spacing):
-            cv2.line(intensity_image, (i, 0), (i, img_height), color=(100, 100, 100), thickness=1)
-        for j in range(0, img_height, grid_spacing):
-            cv2.line(intensity_image, (0, j), (img_width, j), color=(100, 100, 100), thickness=1)
+        # ===== Add grid lines every 20 meters (i.e., every 40 pixels) =====
+        if self.add_grid:
+            grid_spacing = int(img_width / (self.range * 2 / 20))  # 20m per cell → 40px if 480/12
+            for i in range(0, img_width, grid_spacing):
+                cv2.line(intensity_image, (i, 0), (i, img_height), color=(100, 100, 100), thickness=1)
+            for j in range(0, img_height, grid_spacing):
+                cv2.line(intensity_image, (0, j), (img_width, j), color=(100, 100, 100), thickness=1)
 
-        # Draw X and Y axes with arrows
-        center_x, center_y = img_width // 2, img_height // 2
-        axis_length_px = int((10 / self.range) * img_width)  # 10m → 40 pixels
+            # Draw X and Y axes with arrows
+            center_x, center_y = img_width // 2, img_height // 2
+            axis_length_px = int((20 / (self.range * 2)) * img_width)  # 20m → 40 pixels
 
-        # X-axis → Red arrow upward (positive X)
-        cv2.arrowedLine(intensity_image,
-                        (center_x, center_y),
-                        (center_x, center_y - axis_length_px),
-                        color=(0, 0, 255),  # Red
-                        thickness=2, tipLength=0.15)
+            # X-axis → Red arrow upward (positive X)
+            cv2.arrowedLine(intensity_image,
+                            (center_x, center_y),
+                            (center_x, center_y - axis_length_px),
+                            color=(0, 0, 255),  # Red
+                            thickness=2, tipLength=0.15)
 
-        # Y-axis → Green arrow to the left (positive Y)
-        cv2.arrowedLine(intensity_image,
-                        (center_x, center_y),
-                        (center_x - axis_length_px, center_y),
-                        color=(0, 255, 0),  # Green
-                        thickness=2, tipLength=0.15)
+            # Y-axis → Green arrow to the left (positive Y)
+            cv2.arrowedLine(intensity_image,
+                            (center_x, center_y),
+                            (center_x - axis_length_px, center_y),
+                            color=(0, 255, 0),  # Green
+                            thickness=2, tipLength=0.15)
 
         # Compress and publish (CPU)
         _, compressed_image = cv2.imencode('.jpg', intensity_image)
@@ -238,7 +241,7 @@ class PointCloud2ImageGPU(Node):
             timestamp = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
             timestamp_str = f"{timestamp:.6f}".replace(".", "_")
             filename = os.path.join(self.current_save_directory, f'image_{timestamp_str}.jpg')
-            cv2.imwrite(filename, intensity_image_np)
+            cv2.imwrite(filename, intensity_image)
             self.get_logger().info(f"Saved image to {filename}")
 
     def timer_callback(self):
