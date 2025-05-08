@@ -5,11 +5,6 @@ ARGS=("$@")
 # project variable
 PROJ_NAME="perception-fusion"
 
-# Specify dataset, log, and model directories
-HOST_DATA_DIR="~/perception-fusion/data/nuscenes"
-HOST_LOG_DIR="~/perception-fusion/crfnet/tb_logs"
-HOST_MODEL_DIR="~/perception-fusion/crfnet/saved_models"
-
 # Make sure processes in the container can connect to the x server
 # Necessary so gazebo can create a context for OpenGL rendering (even headless)
 XAUTH=/tmp/.docker.xauth
@@ -30,6 +25,9 @@ if [ ! -f $XAUTH ]; then
     exit 1
 fi
 
+# Check if the new_extension directory exists in /media/$USER
+EXTENSION_DIR=$(find /media/$USER -maxdepth 1 -type d -name "new_extension*" | head -n 1)
+
 docker run \
     -it \
     --rm \
@@ -38,9 +36,6 @@ docker run \
     -e XAUTHORITY=$XAUTH \
     -e ROS_MASTER_URI=$ROS_MASTER_URI \
     -e ROS_IP=$ROS_IP \
-    -e HOST_DATA_DIR=$HOST_DATA_DIR \
-    -e HOST_LOG_DIR=$HOST_LOG_DIR \
-    -e HOST_MODEL_DIR=$HOST_MODEL_DIR \
     -e PYTHONPATH=/home/arg/$PROJ_NAME \
     -v "$XAUTH:$XAUTH" \
     -v "/tmp/.X11-unix:/tmp/.X11-unix" \
@@ -48,8 +43,7 @@ docker run \
     -v "/dev:/dev" \
     -v "/var/run/docker.sock:/var/run/docker.sock" \
     -v "/home/$USER/$PROJ_NAME:/home/arg/$PROJ_NAME" \
-    -v "/media/$USER/new_extension:/media/arg/new_extension" \
-    -v "/media/$USER/ARG_SSD:/media/arg/ARG_SSD" \
+    -v "$EXTENSION_DIR:/media/arg/new_extension" \
     -w "/home/arg/$PROJ_NAME" \
     --user "root:root" \
     --name perception-fusion-ros1-cpu \

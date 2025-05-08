@@ -17,3 +17,7 @@ __pycache__/
 data
 
 QGroundControl.AppImage
+
+visualization/
+backup/
+backup2/

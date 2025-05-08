@@ -38,6 +38,9 @@ if [ ! -f $XAUTH ]; then
   exit 1
 fi
 
+# Check if the new_extension directory exists in /media/$USER
+EXTENSION_DIR=$(find /media/$USER -maxdepth 1 -type d -name "new_extension*" | head -n 1)
+
 docker run \
   -it \
   --rm \
@@ -49,7 +52,7 @@ docker run \
   -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
   -v "$XAUTH:$XAUTH" \
   -v "/home/${USER}/${PROJ_NAME}:/home/${USER_NAME}/${PROJ_NAME}" \
-  -v "/media/$USER/new_extension2/bags:/media/arg/new_extension2/bags" \
+  -v "$EXTENSION_DIR:/media/arg/new_extension" \
   -v "/tmp/.X11-unix:/tmp/.X11-unix" \
   -v "/etc/localtime:/etc/localtime:ro" \
   -v "/dev:/dev" \
