@@ -52,17 +52,17 @@ source Docker/cpu/run.sh
 Lidar pointcloud only for example:
 
 ```bash
-python3 -m PerceptionFusion.PerceptionFusion --frame 10 --proj lidar --data /home/arg/perception-fusion/data/argnctu-perception --save_dir visualization
+python3 -m PerceptionFusion.PerceptionFusion --frame 10 --proj lidar --data /home/arg/perception-fusion/data/south-tw-maritime-multi-modal-dataset --save_dir visualization
 ```
 
 Radar pointcloud only for example:
 
 ```bash
-python3 -m PerceptionFusion.PerceptionFusion --frame 10 --proj radar --data /home/arg/perception-fusion/data/argnctu-perception --save_dir visualization
+python3 -m PerceptionFusion.PerceptionFusion --frame 10 --proj radar --data /home/arg/perception-fusion/data/south-tw-maritime-multi-modal-dataset --save_dir visualization
 ```
 
 Lidar pointcloud only for example:
 
 ```bash
-python3 -m PerceptionFusion.PerceptionFusion --frame 10 --proj both --data /home/arg/perception-fusion/data/argnctu-perception --save_dir visualization
+python3 -m PerceptionFusion.PerceptionFusion --frame 10 --proj both --data /home/arg/perception-fusion/data/south-tw-maritime-multi-modal-dataset --save_dir visualization
 ```

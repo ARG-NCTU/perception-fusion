@@ -24,7 +24,7 @@ def pcd_to_camera_frame(points_pcd):
     :param points_pcd: (N, 3) ndarray
     :return: (N, 3) ndarray in camera coordinate frame
     """
-    return np.stack([points_pcd[:, 1], -points_pcd[:, 2], points_pcd[:, 0]], axis=1)
+    return np.stack([-points_pcd[:, 1], -points_pcd[:, 2], points_pcd[:, 0]], axis=1)
 
 def project_pcl_to_image(pcl, t_camera_radar, camera_projection_matrix, image_shape):
     """
@@ -53,13 +53,13 @@ def project_pcl_to_image(pcl, t_camera_radar, camera_projection_matrix, image_sh
     uvs = view_points(points_xyz, camera_projection_matrix).T[:, :2]  # (N, 2)
     uvs = np.round(uvs).astype(np.int32)
 
-    print(f"[Debug] Sample projected points (Z>0): {uvs[:10]}")
+    # print(f"[Debug] Sample projected points (Z>0): {uvs[:10]}")
 
     power = pcl['rcs'].values if 'rcs' in pcl else np.ones(len(depth))
     power = power[valid]
 
     h, w = image_shape[:2]
-    print(f"[Debug] Image size: {w}x{h}")
+    # print(f"[Debug] Image size: {w}x{h}")
     in_bounds = (uvs[:, 0] >= 0) & (uvs[:, 0] < w) & (uvs[:, 1] >= 0) & (uvs[:, 1] < h)
     uvs = uvs[in_bounds]
     depth = depth[in_bounds]

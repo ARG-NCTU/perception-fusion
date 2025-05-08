@@ -6,6 +6,7 @@ import open3d as o3d
 import numpy as np
 from glob import glob
 from scipy.spatial.transform import Rotation as R
+from datetime import datetime, timedelta
 
 class DataLoader:
     def __init__(self, root_dir):
@@ -41,17 +42,36 @@ class DataLoader:
 
         return calib
 
-    def load_camera_image(self, sensor, timestamp):
+    def load_camera_image(self, sensor, target_timestamp):
         img_dir = os.path.join(self.samples_dir, sensor)
-        pattern = f"*{timestamp}*.png"
-        files = glob(os.path.join(img_dir, pattern))
-        return cv2.imread(files[0]) if files else None
+        files = sorted(glob(os.path.join(img_dir, "*.png")))
+        if not files:
+            return None
+        
+        target_timestamp = target_timestamp.split("-")[1]  
 
-    def load_pointcloud(self, sensor, timestamp):
-        pcd_dir = os.path.join(self.samples_dir, sensor)
-        pattern = f"*{timestamp}*.pcd"
-        files = glob(os.path.join(pcd_dir, pattern))
-        return o3d.io.read_point_cloud(files[0]) if files else None
+        timestamps = []
+        for f in files:
+            basename = os.path.basename(f)
+            if "_c_" in basename:
+                ts = basename.split("_c_")[1].replace(".png", "").split("-")[1]
+                if int(ts) > int(target_timestamp):
+                    timestamps.append((abs(int(ts) - int(target_timestamp)), f)) 
+
+        if not timestamps:
+            return None
+
+        timestamps.sort()
+        closest_file = timestamps[0][1]
+        return cv2.imread(closest_file)
+
+    def load_pointcloud_by_filename(self, sensor, filename):
+        path = os.path.join(self.samples_dir, sensor, filename)
+        if not os.path.exists(path):
+            print(f"[Warning] Point cloud not found: {path}")
+            return None
+        return o3d.io.read_point_cloud(path)
+
 
     def get_extrinsic(self, sensor):
         return self.calibration[sensor]['extrinsic']
