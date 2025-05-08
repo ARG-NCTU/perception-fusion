@@ -24,7 +24,8 @@ class DataLoader:
             sensor = item['sensor']
             quat = item['rotation']
             r = R.from_quat([quat[1], quat[2], quat[3], quat[0]])
-            rot_mat = r.as_matrix()
+            rot_mat_ros = r.as_matrix()
+            rot_mat = self.ros_to_cam_rotation(rot_mat_ros)
             trans = np.array(item['translation']).reshape(3, 1)
 
             extrinsic = np.eye(4)
@@ -41,6 +42,20 @@ class DataLoader:
             }
 
         return calib
+    
+    def ros_to_cam_rotation(self, R_ros):
+        """
+        Converts a rotation matrix from ROS coordinate system (X-forward, Y-left, Z-up)
+        to Camera coordinate system (X-right, Y-down, Z-forward).
+        """
+        T = np.array([
+            [0,  1,  0],   # X_ros → +Y_cam → 對應 camera 左
+            [0,  0, -1],   # Y_ros → -Z_cam → 對應 camera 下
+            [1,  0,  0]    # Z_ros → +X_cam → 對應 camera 前
+        ])
+        
+        return T @ R_ros
+
 
     def load_camera_image(self, sensor, target_timestamp):
         img_dir = os.path.join(self.samples_dir, sensor)

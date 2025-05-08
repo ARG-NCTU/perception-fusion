@@ -47,7 +47,25 @@ source Docker/cpu/run.sh
 
 2. Pointcloud projected on Camera Left, Mid, Right, Back Image
 
-![image](example/CAMERA_BACK_lidar.png)
+<div align="center">
+  <table>
+    <tr>
+      <td></td>
+      <td><img src="example/CAMERA_MID_lidar.png" width="300"/></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><img src="example/CAMERA_LEFT_lidar.png" width="300"/></td>
+      <td></td>
+      <td><img src="example/CAMERA_RIGHT_lidar.png" width="300"/></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><img src="example/CAMERA_BACK_lidar.png" width="300"/></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
 
 Lidar pointcloud only for example:
 
