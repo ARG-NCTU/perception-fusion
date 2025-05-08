@@ -60,11 +60,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Perception Fusion Visualization")
     parser.add_argument("--frame", type=int, required=True, help="Frame index")
     parser.add_argument("--proj", choices=["lidar", "radar", "both"], default="both", help="Which pointcloud to project")
+    parser.add_argument("--data", type=str, default="/home/arg/perception-fusion/data/argnctu-perception", help="Path to the dataset")
     parser.add_argument("--save_dir", type=str, default="visualization", help="Base directory to save images")
     args = parser.parse_args()
 
-    home = os.path.expanduser("~/perception-fusion")
-    dataroot = os.path.join(home, "data", "argnctu-perception")
+    dataroot = args.data
+    if not os.path.exists(dataroot):
+        raise FileNotFoundError(f"Data root {dataroot} does not exist")
     fusion = PerceptionFusion(dataroot)
 
     if args.proj == "lidar":
@@ -83,4 +85,4 @@ if __name__ == "__main__":
 
 # Usage:
 # cd ~/perception-fusion
-# python3 -m PerceptionFusion.PerceptionFusion --frame 10 --proj lidar --save_dir visualization
+# python3 -m PerceptionFusion.PerceptionFusion --frame 10 --proj lidar --data /home/arg/perception-fusion/data/argnctu-perception --save_dir visualization
