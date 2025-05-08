@@ -18,6 +18,22 @@ class PerceptionFusion:
             raise IndexError(f"Frame index {frame_index} exceeds available frames in {sensor_dir_name}")
         return os.path.basename(files[frame_index])
 
+    def get_custom_colormap(self):
+        colors = [
+            (1.0, 0.0, 0.0),   # Red
+            (1.0, 0.5, 0.0),   # Orange
+            (1.0, 1.0, 0.0),   # Yellow
+            (0.0, 1.0, 0.0),   # Green
+            (0.0, 0.0, 1.0),   # Blue
+            (0.5, 0.0, 1.0)    # Purple
+        ]
+        colors_bgr = [(int(c[2]*255), int(c[1]*255), int(c[0]*255)) for c in colors]
+        cmap = np.zeros((256, 3), dtype=np.uint8)
+        for i in range(5):
+            for j in range(3):
+                cmap[i*51:(i+1)*51, j] = np.linspace(colors_bgr[i][j], colors_bgr[i+1][j], 51)
+        return cmap
+    
     def visualize(self, filename, image_sensor, pcd_sensor, save_path=None):
         # Extract timestamp from filename (e.g. r_..._l_..._c_TIMESTAMP.pcd)
         parts = filename.split("_c_")
@@ -45,9 +61,39 @@ class PerceptionFusion:
         # Coordinate frame conversion: from PCD to camera frame
         pcl_df[['x','y','z']] = pcd_to_camera_frame(pcl_df[['x','y','z']].values)
 
-        uvs, _, _ = project_pcl_to_image(pcl_df, extrinsic, intrinsic, image.shape)
-        for pt in uvs:
-            cv2.circle(image, pt, 2, (0, 255, 0), -1)
+        uvs, depth, _ = project_pcl_to_image(pcl_df, extrinsic, intrinsic, image.shape)
+        cmap = self.get_custom_colormap()
+
+        # Normalize depth to 0–255 range (for 0–120m)
+        depth_clipped = np.clip(depth, 0, 120)
+        depth_norm = ((depth_clipped / 120.0) * 255).astype(np.uint8)
+
+        # Draw projected points with color
+        for pt, d in zip(uvs, depth_norm):
+            color = tuple(int(c) for c in cmap[d])
+            cv2.circle(image, tuple(pt), 2, color, -1)
+
+        # Draw color legend in the top-right corner
+        legend_h, legend_w = 20, 256
+        legend_img = np.zeros((legend_h, legend_w, 3), dtype=np.uint8)
+        legend_img[:] = cmap[np.newaxis, :]
+        legend_x = image.shape[1] - legend_w - 40
+        legend_y = 10
+        image[legend_y:legend_y + legend_h, legend_x:legend_x + legend_w] = legend_img
+
+        # Add distance labels with black border
+        def draw_text_with_outline(img, text, org, font, scale, color, thickness=1):
+            cv2.putText(img, text, org, font, scale, (0, 0, 0), thickness + 2, lineType=cv2.LINE_AA)
+            cv2.putText(img, text, org, font, scale, color, thickness, lineType=cv2.LINE_AA)
+
+        draw_text_with_outline(image, "0m",     (legend_x, legend_y + legend_h + 15),
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255))
+        draw_text_with_outline(image, "40m",    (legend_x + 85, legend_y + legend_h + 15),
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255))
+        draw_text_with_outline(image, "80m",    (legend_x + 170, legend_y + legend_h + 15),
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255))
+        draw_text_with_outline(image, "120m",   (legend_x + 240, legend_y + legend_h + 15),
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255))
 
         if save_path:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)

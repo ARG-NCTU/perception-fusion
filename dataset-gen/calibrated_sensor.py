@@ -39,7 +39,7 @@ for name, path in camera_sensors.items():
     # Load intrinsic matrix from file
     with open(path, 'r') as f:
         data = json.load(f)
-        K = np.array(data['K']).reshape(3, 3).tolist()
+        K = np.array(data['new_K']).reshape(3, 3).tolist()
 
     output.append({
         "sensor": name,
@@ -67,7 +67,7 @@ for name in radar_sensors:
     })
 
 # Write to JSON
-save_dir = '/home/arg/perception-fusion/data/argnctu-perception/v1.0-trainval'
+save_dir = '/home/arg/perception-fusion/data/south-tw-maritime-multi-modal-dataset/v1.0-trainval'
 os.makedirs(save_dir, exist_ok=True)
 with open(f"{save_dir}/calibrated_sensor.json", 'w') as f:
     json.dump(output, f, indent=4)

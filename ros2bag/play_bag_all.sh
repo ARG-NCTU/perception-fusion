@@ -1,6 +1,7 @@
 # BAG_PATH="/media/arg/new_extension/bags/tainan-0411-bags/ros2-all-2025-04-11-14-17-53/ros2-all-2025-04-11-14-17-53_0.db3"
 # BAG_PATH="/home/arg/perception-fusion/bags/20250502-124545_going_jetsea_part0/20250502-124545_going_jetsea_part0_0.db3"
-BAG_PATH="/home/arg/perception-fusion/bags/recorded_rosbag_going_jetsea_20250502-125945/20250502-125945_going_jetsea_part0/20250502-125945_going_jetsea_part0_0.db3"
+# BAG_PATH="/home/arg/perception-fusion/bags/recorded_rosbag_going_jetsea_20250502-125945/20250502-125945_going_jetsea_part0/20250502-125945_going_jetsea_part0_0.db3"
+BAG_PATH="/media/arg/new_extension/south-tw-maritime-multi-modal-dataset-bags/ANP-0411-camera-lidar-radar-gps-imu-ais-bags/ros2-all-2025-04-11-14-57-16_4.db3"
 
 # Check if the bag file exists
 if [ ! -f "$BAG_PATH" ]; then
@@ -23,4 +24,4 @@ TOPICS=(
 )
 
 # Play the bag file with the specified topics
-ros2 bag play "$BAG_PATH" --topics "${TOPICS[@]} --clock"
+ros2 bag play "$BAG_PATH" --topics "${TOPICS[@]} --rate 300.0 --clock"
