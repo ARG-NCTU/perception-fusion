@@ -47,7 +47,7 @@ source Docker/cpu/run.sh
 
 2. Pointcloud projected on Camera Left, Mid, Right, Back Image
 
-![image](docs/example/CAMERA_BACK_lidar.png)
+![image](example/CAMERA_BACK_lidar.png)
 
 Lidar pointcloud only for example:
 
