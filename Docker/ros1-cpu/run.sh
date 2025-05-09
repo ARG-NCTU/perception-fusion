@@ -25,8 +25,12 @@ if [ ! -f $XAUTH ]; then
     exit 1
 fi
 
-# Check if the new_extension directory exists in /media/$USER
+# Check for new_extension directory
 EXTENSION_DIR=$(find /media/$USER -maxdepth 1 -type d -name "new_extension*" | head -n 1)
+EXTENSION_MOUNT=""
+if [ -n "$EXTENSION_DIR" ]; then
+  EXTENSION_MOUNT="-v $EXTENSION_DIR:/media/arg/new_extension"
+fi
 
 docker run \
     -it \
@@ -43,7 +47,7 @@ docker run \
     -v "/dev:/dev" \
     -v "/var/run/docker.sock:/var/run/docker.sock" \
     -v "/home/$USER/$PROJ_NAME:/home/arg/$PROJ_NAME" \
-    -v "$EXTENSION_DIR:/media/arg/new_extension" \
+    $EXTENSION_MOUNT \
     -w "/home/arg/$PROJ_NAME" \
     --user "root:root" \
     --name perception-fusion-ros1-cpu \
