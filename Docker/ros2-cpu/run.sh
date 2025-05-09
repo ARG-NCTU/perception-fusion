@@ -3,14 +3,12 @@
 ARGS=("$@")
 
 PROJ_NAME="perception-fusion"
-
 IMG="argnctu/perception-fusion:ros2-cpu"
-
 USER_NAME="arg"
 CONTAINER_NAME="perception-fusion-ros2-cpu"
 
 CONTAINER_ID=$(docker ps -aqf "ancestor=${IMG}")
-if [ $CONTAINER_ID ]; then
+if [ "$CONTAINER_ID" ]; then
   echo "Attach to docker container $CONTAINER_ID"
   xhost +
   docker exec --privileged -e DISPLAY=${DISPLAY} -e LINES="$(tput lines)" -it ${CONTAINER_ID} bash
@@ -18,8 +16,7 @@ if [ $CONTAINER_ID ]; then
   return
 fi
 
-# Make sure processes in the container can connect to the x server
-# Necessary so gazebo can create a context for OpenGL rendering (even headless)
+# Setup XAUTH
 XAUTH=/tmp/.docker.xauth
 if [ ! -f $XAUTH ]; then
   xauth_list=$(xauth nlist $DISPLAY)
@@ -32,14 +29,17 @@ if [ ! -f $XAUTH ]; then
   chmod a+r $XAUTH
 fi
 
-# Prevent executing "docker run" when xauth failed.
 if [ ! -f $XAUTH ]; then
   echo "[$XAUTH] was not properly created. Exiting..."
   exit 1
 fi
 
-# Check if the new_extension directory exists in /media/$USER
+# Check for new_extension directory
 EXTENSION_DIR=$(find /media/$USER -maxdepth 1 -type d -name "new_extension*" | head -n 1)
+EXTENSION_MOUNT=""
+if [ -n "$EXTENSION_DIR" ]; then
+  EXTENSION_MOUNT="-v $EXTENSION_DIR:/media/arg/new_extension"
+fi
 
 docker run \
   -it \
@@ -48,11 +48,11 @@ docker run \
   -e XAUTHORITY=$XAUTH \
   -e REPO_NAME=$REPO_NAME \
   -e HOME=/home/${USER_NAME} \
-  -e OPENAI_API_KEY=$OPENAI_API_KEY\
+  -e OPENAI_API_KEY=$OPENAI_API_KEY \
   -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
   -v "$XAUTH:$XAUTH" \
   -v "/home/${USER}/${PROJ_NAME}:/home/${USER_NAME}/${PROJ_NAME}" \
-  -v "$EXTENSION_DIR:/media/arg/new_extension" \
+  $EXTENSION_MOUNT \
   -v "/tmp/.X11-unix:/tmp/.X11-unix" \
   -v "/etc/localtime:/etc/localtime:ro" \
   -v "/dev:/dev" \
@@ -66,5 +66,3 @@ docker run \
   --security-opt seccomp=unconfined \
   "${IMG}" \
   bash
-
-# -e "TERM=xterm-256color" \
